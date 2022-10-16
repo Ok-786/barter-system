@@ -1,0 +1,119 @@
+/*Desktop View*/
+.active {
+  color: white;
+}
+
+.not-active {
+  color: lightgrey;
+  /* background-color: rgba(118, 20, 20, alpha) ; */
+}
+
+.logo-active {
+  display: inline;
+  color: white;
+}
+
+.logo-not-active {
+  display: none;
+}
+
+.d-footer {
+  /* display: none; */
+  bottom: 0;
+  position: absolute;
+  background: #3D98D0;
+  height: 30%;
+  width: 100%;
+  text-align: center;
+
+  padding-top: 20px;
+}
+
+.header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(107deg, rgba(17, 22, 91, 0.9) 32%, rgba(75, 9, 85, 0.9)52%);
+  z-index: 100;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 0px 40px; */
+  height: 60px;
+}
+
+.logo-nav {
+  /* margin-left: 6%; */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  /* gap:50% */
+  /* justify-content: center; */
+}
+
+.logo {
+  /* width: 45px;
+  height: 45px; */
+  background-color: rgba(246, 246, 246, 0.9);
+  border-end-end-radius: 50%;
+  border-start-start-radius: 50%;
+  border: 3px solid rgb(30, 0, 128);
+  padding-inline: 1vh
+}
+
+.nav-options {
+  /* padding-left: 25px; */
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  /* grid-gap: 50px; */
+  list-style-type: none;
+}
+
+.mobile-option {
+  display: none;
+}
+
+.option :hover {
+  color: white;
+}
+
+.signin-up {
+  display: flex;
+  padding: 0px 5px;
+  list-style-type: none;
+}
+
+.sign-in {
+  padding-right: 50px;
+  align-self: center;
+}
+
+.sign-in :hover {
+  color: white;
+}
+
+.signup-btn {
+  padding: 10px 10px;
+  height: 2.4rem;
+  border-radius: 3px;
+  background: rgb(222, 9, 241);
+  color: white;
+  cursor: pointer;
+  align-items: center;
+}
+
+.logo {
+  /* width: 45px; */
+  /* height: 45px; */
+  margin-left: 8vh;
+  color: rgb(255, 255, 255);
+  font-size: 2rem;
+}
+
+.mobile-menu {
+  display: none;
+}

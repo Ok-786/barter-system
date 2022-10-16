@@ -1,0 +1,22 @@
+.topContainer {
+    /* margin-top: 30%; */
+    padding: 4%;
+    /* background-color: rgba(243, 237, 237, 0.497); */
+}
+
+.bottomContainer {
+    margin-bottom: 15px;
+}
+
+.form {
+    margin-top: 10%;
+    width: 50vh;
+}
+
+.centerLogo {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: full-width;
+    padding-bottom: 20px;
+}
