@@ -1,0 +1,108 @@
+.container {
+    width: 100%;
+    margin-top: 5vh;
+    justify-content: center;
+    /* height: 30vh; */
+    /* padding: 4%; */
+    /* background: rgb(57, 49, 63); */
+    /* display: flex; */
+    /* flex-direction: column; */
+    align-items: center;
+}
+
+.container>h1 {
+    /* color: rgb(255, 234, 195) */
+    font-size: 5ch;
+    margin-left: 10vh
+}
+
+.pattern1 {
+    background-image: url('../../../assets/pattern2.png');
+    width: 40%;
+    opacity: .3;
+    height: 40vh;
+    /* margin-top: -5%; */
+    background-size: contain;
+    position: absolute;
+    background-repeat: no-repeat;
+    /* background-color: aqua; */
+}
+
+.pattern2 {
+    background-repeat: no-repeat;
+    background-image: url('../../../assets/pattern2.png');
+    width: 20%;
+    opacity: .3;
+    height: 40vh;
+    background-size: contain;
+    position: absolute;
+    right: 0;
+    transform: scaleX(-1);
+    /* background-color: aqua; */
+}
+
+.card-container {
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    /* color: purple; */
+    font-weight: bold;
+}
+
+
+.carousel {
+    width: 90%;
+    margin-inline: 6%;
+    /* background: rgba(201, 165, 118, 0.37); */
+    /* direction: rtl; */
+    display: flex;
+    /* justify-content: flex-start; */
+    align-items: center;
+    overflow: hidden;
+}
+
+.carousel.active {
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+}
+
+.cWrapper {
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin-inline: 10vh; */
+}
+
+.item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: linear-gradient(10deg, rgba(241, 241, 241, 1) 32%, rgba(139, 9, 160, 1) 70%);
+    justify-content: center;
+    align-items: center;
+    margin-inline: 10px;
+    border-radius: 5vh;
+    padding: 4vh;
+    width: 10vh;
+    height: 10vh;
+}
+
+.item p {
+    /* position: relative; */
+    /* top: -5px; */
+    /* font-size: 5rem; */
+    font-weight: bold;
+    color: #fff;
+    user-select: none;
+}
+
+.item:first-child {
+    margin-right: 0px !important;
+}
+
+.item:last-child {
+    margin-left: 0px !important;
+}
