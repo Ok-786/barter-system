@@ -30,8 +30,6 @@ export default function PlaceBid({ open, handleOpen, handleClose, product }) {
     const [isSelection, setIsSelection] = useState(false);
     const [image, setImage] = useState();
     const [fileReader, setFileReader] = useState('');
-    console.log('fileReaderaaaaa')
-    console.log(fileReader)
     const user = useSelector(state => state.user.user);
     const formik = useFormik({
         initialValues: {

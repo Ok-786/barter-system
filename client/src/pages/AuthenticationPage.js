@@ -20,11 +20,6 @@ const AuthenticationPage = () => {
                 <Grid container spacing={0} >
                     <Paper className={styles['topContainer']}>
                         <Grid item xs={12}>
-                            {/* <Typography color='#0288d1' variant='h2' textAlign='center' gutterBottom component='div' >
-                                Chater Mate
-                                <hr style={{ borderTop: '1px solid aqua' }} />
-                            </Typography> */}
-                            {/* <IconButton > */}
                             <div className={styles['centerLogo']}>
                                 <img src={Logo} alt="aaaa" width='100px' />
                             </div>
@@ -32,7 +27,9 @@ const AuthenticationPage = () => {
                         <Grid item xs={12}>
                             <NavigationTab active={active} setActiveHandler={setActiveHandler} />
                             <div className={styles['form']} >
-                                {active === 'Signup' ? <SignupForm /> : <SigninForm />}
+                                {
+                                    active === 'Signup' ? <SignupForm /> : <SigninForm />
+                                }
                             </div>
                         </Grid>
                     </Paper>

@@ -43,16 +43,10 @@ const SignupForm = () => {
     }
 
     const handleSetFormInputs = (event) => {
-        event.target.name === "file" ?
-            setFormInputs({
-                ...formInputs,
-                file: event.target.files[0]
-            })
-            :
-            setFormInputs({
-                ...formInputs,
-                [event.target.name]: event.target.value
-            })
+        setFormInputs({
+            ...formInputs,
+            [event.target.name]: event.target.value
+        })
     }
 
     const onSubmitHandler = async (e) => {
@@ -84,18 +78,10 @@ const SignupForm = () => {
         }
 
 
-        // sendRequest({
-        //     url: `http://localhost:8000/api/auth/register`,
-        //     headers: { 'Content-Type': 'application/json' }, //when sending formdata we dont set headers
-        //     method: 'POST',
-        //     body: JSON.stringify(formInputs)
-        // })
-
         try {
             const { data } = await axiosSignup(formInputs);
-            setIsLoading(false);
+            setIsLoading(true);
             dispatch(signup(data));
-            // const { data } = await axiosSignup(formInputs);
             setIsLoading(false);
             toast.success("User registered successfully!", toastOptions)
             setFormInputs({

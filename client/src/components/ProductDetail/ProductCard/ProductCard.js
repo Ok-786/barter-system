@@ -8,12 +8,11 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Box, Grid } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { axiosAddFav } from '../../../../utils/Api';
+import { axiosAddFav } from '../../../utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFav } from '../../../../Store/Actions/user';
-import Products from '../Products';
-import PlaceBid from '../../PlaceBid/PlaceBid';
+import { updateFav } from '../../../Store/Actions/user';
 import { useNavigate } from 'react-router-dom';
+import PlaceBid from '../../user/PlaceBid/PlaceBid';
 
 const ProductCard = React.memo(({ product }) => {
     const [hover, setHover] = React.useState(false);
@@ -185,8 +184,8 @@ const ProductCard = React.memo(({ product }) => {
                         </>
                     }
                 </Box>
-                <div style={{ marginTop: '10px' }}>
-                    <Grid container onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
+                <div style={{ marginTop: '10px' }} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
+                    <Grid container >
                         <Grid item xs={10}  >
                             <Typography variant="h5"><b>{product.name}</b></Typography>
                         </Grid>
@@ -196,13 +195,13 @@ const ProductCard = React.memo(({ product }) => {
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
-                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
+                            <Avatar style={{ backgroundColor: '#281c83' }} />
                         </Grid>
-                        <Grid item xs={2} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
+                        <Grid item xs={2} >
                             <Typography variant="body2" color='grey'>creator</Typography>
                             <Typography variant="body1" color='grey'><b>{product.user_name}</b></Typography>
                         </Grid>
-                        <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
+                        <Grid item xs={5} >
                             <Typography variant="body2" color='grey'>Worth <b>{product.worth}$</b></Typography>
                             {getStars()}
                         </Grid>

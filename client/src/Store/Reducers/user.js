@@ -29,7 +29,7 @@ const userSlice = createSlice({
             state.user.wish_list.splice(index, 1)
         },
         ADD_ALL_PRODUCTS(state, action) {
-            state.user.allProducts = action.payload
+            state.allProducts = action.payload
         }
     }
 })

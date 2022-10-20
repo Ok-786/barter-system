@@ -7,6 +7,19 @@ export const axiosSignin = async (formData) => await axios.post(`${url}/api/auth
 export const axiosSignup = async (formData) => await axios.post(`${url}/api/auth/signup`, formData);
 export const axiosGetAllProducts = async (formData) => await axios.get(`${url}/api/products`);
 export const axiosAddFav = async (formData) => await axios.post(`${url}/api/auth/wishlist/update`, formData);
+export const axiosAddProduct = async (formData) => await axios({
+    url: `${url}/api/products/register`,
+    data: formData,
+    method: 'post',
+    headers: { "Content-Type": "multipart/form-data" },
+});
+
+
+
+
+
+
+
 
 
 

@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { Avatar, Box, Card, CardMedia, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Gallery from './Gallery/Gallery';
+import { axiosAddProduct } from '../../../utils/Api';
 
 export default function AddProduct(props) {
     const categories = ['Mobiles', 'Laptop', 'Cars', 'Bikes', 'Cloths', 'Games', 'Pets', 'Decoration']
@@ -16,8 +17,6 @@ export default function AddProduct(props) {
     const [isSelection, setIsSelection] = useState(false);
     const [image, setImage] = useState();
     const [fileReader, setFileReader] = useState('');
-    console.log('fileReaderaaaaa')
-    console.log(fileReader)
     const user = useSelector(state => state.user.user);
     const formik = useFormik({
         initialValues: {
@@ -28,7 +27,7 @@ export default function AddProduct(props) {
                 console.log('im clicked')
                 const formData = new FormData();
                 formData.append('type', values.type);
-                formData.append('category', values.category);
+                formData.append('category', values.type == 'Selection' ? values.category : undefined);
                 formData.append('worth', values.worth);
                 formData.append('title', values.title);
                 formData.append('additionalDetails', values.additionalDetails);
@@ -38,25 +37,20 @@ export default function AddProduct(props) {
                 console.log(image);
 
                 var response;
-                // try {
-                //     response = await fetch('http://localhost:8000/api/auth/staff/create', {
-                //         method: 'POST',
-                //         headers: { token: localStorage.token },
-                //         body: formData
-                //     });
-                // } catch (err) {
-                //     console.log("aaa" + err);
-                // }
+                try {
+                    response = await axiosAddProduct(formData);
+                } catch (err) {
+                    console.log("aaa" + err);
+                }
 
-                // const parseRes = await response.json();
-                // if (parseRes === "Staff Created") {
-                //     toast.success("New Staff Created!");
-                // } else {
-
-                //     toast.error(parseRes);
-                // }
-                // console.log('im in')
-                // props.setRefresh(true);
+                console.log(response);
+                if (response === "Staff Created") {
+                    toast.success("New Staff Created!");
+                } else {
+                    toast.error(response);
+                }
+                console.log('im in')
+                props.setRefresh(true);
                 // props.handleClose()
                 // formik.resetForm();
 
@@ -207,13 +201,9 @@ export default function AddProduct(props) {
                             <Grid item xs={12} style={{ display: 'grid' }}>
                                 <label className="labels" style={{}}>Additional Details</label><TextField name="additionalDetails" multiline={true} rows={3} size="small" variant="outlined" type="text" className="form-control" placeholder="Enter additional details" value={formik.values.additionalDetails} onChange={formik.handleChange} />
                             </Grid>
-                            <Button fullWidth style={{ backgroundColor: '#282d6b', marginTop: '1vh' }} color="primary" variant="contained" type="submit">Save Profile</Button>
+                            <Button fullWidth style={{ backgroundColor: '#282d6b', marginTop: '1vh' }} color="primary" variant="contained" type="submit" >Save Profile</Button>
                         </Grid>
                     </Grid>
-                    {/* <div className="d-flex justify-content-between align-items-center mb-3"> */}
-                    {/* <h4 className="text-right" >Add Image</h4> */}
-
-                    {/* </div> */}
 
                 </Grid>
             </form >
@@ -222,13 +212,3 @@ export default function AddProduct(props) {
     );
 };
 
-// {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-//                     <DatePicker
-//                         label="Date of Birth"
-//                         value={date}
-//                         onChange={(newValue) => {
-//                             setDate(newValue);
-//                         }}
-//                         renderTextField size="small"  variant="outlined"={(params) => <TextField size="small"  variant="outlined" style={{ width: '49%', marginInlineStart: '1%' }} className={classes.innerFormDate} variant="outlined"  {...params} />}
-//                     />
-//                 </LocalizationProvider> */}

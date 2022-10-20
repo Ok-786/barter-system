@@ -12,6 +12,8 @@ import Navbar from './components/NavBar/Navbar';
 import Footer from './components/Footer/Footer';
 import AddPost from './pages/AddPost';
 import ProductDetail from './pages/ProductDetail';
+import UserProfile from './pages/UserProfile';
+import WishList from './pages/WishList';
 
 
 const Routes = () => {
@@ -32,7 +34,7 @@ const Routes = () => {
     <div >
       <ToastContainer />
       <BrowserRouter className="container">
-        {login && <Navbar setSearchQuery={setSearchQuery} />}
+        {login && user.role === 'client' && <Navbar setSearchQuery={setSearchQuery} />}
         <Switch className="container">
 
           {
@@ -42,6 +44,8 @@ const Routes = () => {
                   <>
                     <Route path='/home' element={<HomePage search={search} />} exact />
                     <Route path='/productdetail/:id' element={<ProductDetail search={search} />} exact />
+                    <Route path='/userprofile/:id' element={<UserProfile search={search} />} exact />
+                    <Route path='/wishlist/:id' element={<WishList search={search} />} exact />
                     <Route path='/addpost' element={<AddPost search={search} />} exact />
                     <Route path="/" element={<Navigate to="/home" />} />
                   </>
@@ -59,7 +63,7 @@ const Routes = () => {
 
           }
         </Switch>
-        {login && <Footer />}
+        {login && user.role === "client" && < Footer />}
       </BrowserRouter>
 
     </div>

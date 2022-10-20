@@ -14,6 +14,7 @@ import AvatarMenu from "./AvatarMenu";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EmailIcon from '@mui/icons-material/Email';
 
+
 function Navbar({ setSearchQuery }) {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
@@ -50,28 +51,35 @@ function Navbar({ setSearchQuery }) {
             >
               <NavLink
                 className={({ isActive }) =>
-                  isActive ? styles["active"] : styles["not-active"]
+                  styles["not-active"]
                 }
                 to={routeItems[index]}
                 style={{ textDecoration: "none" }}
               >
                 <NavLink
                   className={({ isActive }) =>
-                    isActive ? styles["logo-active"] : styles["logo-not-active"]
+                    styles["logo-not-active"]
                   }
                   to={routeItems[index]}
                   style={{ textDecoration: "none" }}
                 >
                   <SquareIcon style={{ fontSize: "1rem" }} /> &nbsp;
                 </NavLink>
-                {item}
+                {
+                  item.toLowerCase() === 'addpost' ?
+                    <div style={{ borderBlockStart: '5px solid rgb(0,0,120)', borderBlockEnd: '5px solid rgb(200,0,120)', borderInlineStart: '5px solid rgb(200,0,20)', borderInlineEnd: '5px solid rgb(0,0,120)', borderRadius: '25vh', paddingInline: '2vh' }}>{item}</div>
+                    :
+                    item
+                }
               </NavLink>
             </Button>
           ))}
         </Box>
-        <SearchBar setSearchQuery={setSearchQuery} />
-        <EmailIcon style={{ color: "white", marginTop: '1vh', marginLeft: '2vh' }} />
-        <NotificationsIcon style={{ color: "white", marginTop: '1vh', marginLeft: '2vh' }} />
+        <div style={{ marginTop: '1vh' }}>
+          <SearchBar setSearchQuery={setSearchQuery} />
+        </div>
+        <EmailIcon style={{ color: "white", marginTop: '2vh', marginLeft: '2vh' }} />
+        <NotificationsIcon style={{ color: "white", marginTop: '2vh', marginLeft: '2vh' }} />
         <AvatarMenu />
       </ul>
     </div>

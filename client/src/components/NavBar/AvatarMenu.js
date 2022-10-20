@@ -12,7 +12,7 @@ export default function AvatarMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const navigate = useNavigate();
-
+  const user = useSelector(state => state.user.user);
   const login = useSelector(state => state.user.login);
   const dispatch = useDispatch();
 
@@ -81,7 +81,7 @@ export default function AvatarMenu(props) {
 
         <MenuItem style={{ width: '200px', }}
           onClick={() => {
-            props.setSelectedComponent('MyAccount')
+            navigate(`/userprofile/${user.id}`, { state: { user, isOther: false } })
           }}
         >
           <Avatar src={'#'} alt="User" style={{}} /> My Profile
@@ -93,7 +93,9 @@ export default function AvatarMenu(props) {
           </ListItemIcon>
           My Ads
         </MenuItem>
-        <MenuItem style={{}}>
+        <MenuItem style={{}} onClick={() => {
+          navigate(`/wishlist/${user.id}`, { state: { user } })
+        }}>
           <ListItemIcon>
             <LocalGroceryStoreIcon fontSize="small" />
           </ListItemIcon>

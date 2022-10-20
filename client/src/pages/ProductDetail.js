@@ -5,10 +5,7 @@ import Detail from '../components/ProductDetail/Detail'
 export default function ProductDetail() {
     return (
         <div>
-            <Detail/>
-
-
-
+            <Detail />
         </div>
     )
 }

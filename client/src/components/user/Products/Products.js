@@ -138,11 +138,16 @@ export default function Products({ search }) {
     async function getProducts() {
         setLoading(true)
         const response = await axiosGetAllProducts();
+        console.log('response.data')
+        console.log(response.data.products)
         setProducts(response.data.products);
         setAllProducts(response.data.products);
-        dispatch(addAllProducts(response.data.products))
         setLoading(false)
     }
+    useEffect(() => {
+
+        dispatch(addAllProducts(allProducts))
+    }, [allProducts, dispatch])
 
     useEffect(() => {
         getProducts()
@@ -155,6 +160,8 @@ export default function Products({ search }) {
         })
         setProducts(items)
     }, [search])
+
+
 
     return (
         <>
@@ -178,7 +185,7 @@ export default function Products({ search }) {
                     <Grid container rowGap={6} >
                         {
                             products ? products.map(product =>
-                                <>
+                                product.user_email !== user.email && <>
                                     <Grid item lg={3}>
                                         <ProductCard product={product} />
                                     </Grid>

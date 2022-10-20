@@ -11,51 +11,51 @@ import { ref, uploadBytes } from "firebase/storage";
 
 export const registerProducts = async (req, res) => {
     const data = req.body;
-    console.log(data)
+    console.log('data', data)
 
     console.log(req.file)
-    const choicesArray = data.category.split(',').map(String);
-    console.log(choicesArray)
-    
-    try {
-        const gifts = Gifts.doc();
-        await gifts.set({
-            image: req.file.originalname,
-            description: data.description,
-            featured: (data.featured === 'true') ? true : false,
-            price: data.price,
-            title: data.title,
-            expiry: data.expiry,
-            category: choicesArray,
-            id: gifts.id
-        });
-        console.log(gifts.id)
+    // const choicesArray = data.category.split(',').map(String);
+    // console.log(choicesArray)
 
-        const firebaseConfig = {
-            apiKey: process.env.API_KEY,
-            authDomain: process.env.AUTH_DOMAIN,
-            projectId: process.env.PROJECT_ID,
-            storageBucket: process.env.STORAGE_BUCKET,
-            messagingSenderId: process.env.MESSAGING_SENDER_ID,
-            appId: process.env.APP_ID,
-            measurementId: process.env.MEASUREMENT_ID
-        };
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app)
+    // try {
+    //     const gifts = Gifts.doc();
+    //     await gifts.set({
+    //         image: req.file.originalname,
+    //         description: data.description,
+    //         featured: (data.featured === 'true') ? true : false,
+    //         price: data.price,
+    //         title: data.title,
+    //         expiry: data.expiry,
+    //         category: choicesArray,
+    //         id: gifts.id
+    //     });
+    //     console.log(gifts.id)
 
-        const file = req.file;
-        const metatype = { contentType: file.mimetype, name: file.originalname };
-        const imageRef = ref(storage, `gift-images/${file.originalname}`);
-        console.log(req.file)
-        console.log('fsfsfsfs')
-        console.log(req.file.buffer)
-        await uploadBytes(imageRef, file.buffer, metatype)
+    //     const firebaseConfig = {
+    //         apiKey: process.env.API_KEY,
+    //         authDomain: process.env.AUTH_DOMAIN,
+    //         projectId: process.env.PROJECT_ID,
+    //         storageBucket: process.env.STORAGE_BUCKET,
+    //         messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    //         appId: process.env.APP_ID,
+    //         measurementId: process.env.MEASUREMENT_ID
+    //     };
+    //     // Initialize Firebase
+    //     const app = initializeApp(firebaseConfig);
+    //     const storage = getStorage(app)
 
-        res.json({ gifts });
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
+    //     const file = req.file;
+    //     const metatype = { contentType: file.mimetype, name: file.originalname };
+    //     const imageRef = ref(storage, `gift-images/${file.originalname}`);
+    //     console.log(req.file)
+    //     console.log('fsfsfsfs')
+    //     console.log(req.file.buffer)
+    //     await uploadBytes(imageRef, file.buffer, metatype)
+
+    //     res.json({ gifts });
+    // } catch (err) {
+    //     res.status(500).json({ message: err.message })
+    // }
 }
 
 export const searchItem = async (req, res) => {
