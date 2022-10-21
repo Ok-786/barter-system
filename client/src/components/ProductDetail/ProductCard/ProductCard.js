@@ -99,7 +99,7 @@ const ProductCard = React.memo(({ product }) => {
                         height="280vh"
                         width="100%"
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
-                        image={product.image}
+                        image={`http://localhost:8000/${product.image}`}
                         alt="green iguana"
 
                     />

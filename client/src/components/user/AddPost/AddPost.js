@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@mui/material/Button';
@@ -17,7 +17,24 @@ export default function AddProduct(props) {
     const [isSelection, setIsSelection] = useState(false);
     const [image, setImage] = useState();
     const [fileReader, setFileReader] = useState('');
+    console.log('aaa', fileReader, image)
     const user = useSelector(state => state.user.user);
+    const [location, setLocation] = useState({
+        lat: 0,
+        long: 0
+    })
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log("Latitude is :", position.coords.latitude);
+            console.log("Longitude is :", position.coords.longitude);
+            setLocation({
+                lat: position.coords.latitude,
+                long: position.coords.longitude,
+            })
+        });
+    }, [])
+
     const formik = useFormik({
         initialValues: {
         },
@@ -26,22 +43,52 @@ export default function AddProduct(props) {
             try {
                 console.log('im clicked')
                 const formData = new FormData();
+                formData.append('user_id', user.id);
+                formData.append('stars', user.rating);
+                formData.append('user_email', user.email);
+                formData.append('user_name', user.name);
                 formData.append('type', values.type);
                 formData.append('category', values.type == 'Selection' ? values.category : undefined);
                 formData.append('worth', values.worth);
                 formData.append('title', values.title);
                 formData.append('additionalDetails', values.additionalDetails);
-                formData.append('file', image);
+                formData.append('file1', image[0]);
+                formData.append('file2', image[1]);
+                formData.append('file3', image[2]);
+                formData.append('file4', image[3]);
+                formData.append('long', location.long);
+                formData.append('lat', location.lat);
                 console.log('formData');
                 console.log(values);
                 console.log(image);
 
                 var response;
                 try {
-                    response = await axiosAddProduct(formData);
+                    response = await fetch('http://localhost:8000/api/products/register', {
+                        method: 'POST',
+                        body: formData
+                    });
                 } catch (err) {
                     console.log("aaa" + err);
                 }
+
+                const parseRes = await response.json();
+                if (parseRes.products) {
+                    toast.success("New Product added!");
+                } else {
+
+                    toast.error(parseRes);
+                }
+                console.log('im in')
+                // props.setRefresh(true);
+                // props.handleClose()
+                // formik.resetForm();
+
+                // try {
+                //     response = await axiosAddProduct(formData);
+                // } catch (err) {
+                //     console.log("aaa" + err);
+                // }
 
                 console.log(response);
                 if (response === "Staff Created") {
@@ -70,8 +117,8 @@ export default function AddProduct(props) {
 
     return (
         <div className='full-top-con'>
+            {/* <AddEmployees /> */}
             <form onSubmit={formik.handleSubmit} >
-
                 <Grid container columnGap={12} style={{ color: 'gray' }}>
 
                     <Grid item xs={3}>

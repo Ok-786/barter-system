@@ -11,6 +11,8 @@ import ImageUpload from './ImageUpload';
 import { toast } from 'react-toastify';
 import { Avatar, Card, CardMedia, Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { axiosAddBid } from '../../../utils/Api';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -24,13 +26,15 @@ const style = {
     p: 4,
 };
 
-export default function PlaceBid({ open, handleOpen, handleClose, product }) {
+export default function PlaceBid({ getProducts, open, handleOpen, handleClose, product }) {
     const categories = ['Mobiles', 'Laptop', 'Cars', 'Bikes', 'Cloths', 'Games', 'Pets', 'Decoration']
     const validationSchema = yup.object({});
     const [isSelection, setIsSelection] = useState(false);
     const [image, setImage] = useState();
     const [fileReader, setFileReader] = useState('');
     const user = useSelector(state => state.user.user);
+    const navigate = useNavigate();
+    
     const formik = useFormik({
         initialValues: {
         },
@@ -39,38 +43,41 @@ export default function PlaceBid({ open, handleOpen, handleClose, product }) {
             try {
                 console.log('im clicked')
                 const formData = new FormData();
-                formData.append('type', values.type);
                 formData.append('category', values.category);
                 formData.append('worth', values.worth);
                 formData.append('title', values.title);
                 formData.append('additionalDetails', values.additionalDetails);
-                formData.append('file', image);
+                formData.append('file', image[0]);
+                formData.append('id', user.id);
+                formData.append('stars', user.rating);
+                formData.append('email', user.email);
+                formData.append('name', user.name);
                 console.log('formData');
                 console.log(values);
                 console.log(image);
 
                 var response;
-                // try {
-                //     response = await fetch('http://localhost:8000/api/auth/staff/create', {
-                //         method: 'POST',
-                //         headers: { token: localStorage.token },
-                //         body: formData
-                //     });
-                // } catch (err) {
-                //     console.log("aaa" + err);
-                // }
+                console.log('getProducts')
+                console.log(getProducts)
+                try {
+                    response = await axiosAddBid(formData, product.id);
+                    await getProducts();
+                } catch (err) {
+                    console.log("aaa" + err);
+                }
 
-                // const parseRes = await response.json();
-                // if (parseRes === "Staff Created") {
-                //     toast.success("New Staff Created!");
-                // } else {
-
-                //     toast.error(parseRes);
-                // }
-                // console.log('im in')
+                console.log(response)
+                if (response) {
+                    toast.success("Bid has been Placed!");
+                    navigate('/home')
+                    handleClose()
+                } else {
+                    toast.error(response);
+                }
+                console.log('im in')
                 // props.setRefresh(true);
-                // props.handleClose()
                 // formik.resetForm();
+
 
             } catch (error) {
                 console.log(error);

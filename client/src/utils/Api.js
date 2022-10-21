@@ -13,6 +13,12 @@ export const axiosAddProduct = async (formData) => await axios({
     method: 'post',
     headers: { "Content-Type": "multipart/form-data" },
 });
+export const axiosAddBid = async (formData, id) => await axios({
+    url: `${url}/api/products/bid/${id}`,
+    data: formData,
+    method: 'post',
+    headers: { "Content-Type": "multipart/form-data" },
+});
 
 
 

@@ -6,14 +6,24 @@ import TimerIcon from '@mui/icons-material/Timer';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ProductCard from './ProductCard/ProductCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { axiosGetAllProducts } from '../../utils/Api';
+import { addAllProducts } from '../../Store/Actions/user';
+import PlaceBid from '../user/PlaceBid/PlaceBid';
+import { useNavigate } from 'react-router-dom';
 
 export default function Detail() {
     const location = useLocation();
     const [date, setDate] = useState();
     const product = location.state.product;
     const allProducts = useSelector(state => state.user.allProducts)
-    console.log(product)
+    const user = useSelector(state => state.user.user)
+    const dispatch = useDispatch();
+    const [products, setProducts] = useState([]);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+const navigate = useNavigate()
 
     useEffect(() => {
         window.scrollTo({
@@ -22,6 +32,21 @@ export default function Detail() {
             behavior: "smooth"
         })
     }, [])
+
+
+    async function getProducts() {
+        const response = await axiosGetAllProducts();
+        console.log('response.data')
+        setProducts(response.data.products);
+    }
+
+    useEffect(() => {
+        getProducts()
+    }, [])
+
+    useEffect(() => {
+        dispatch(addAllProducts(products))
+    }, [products, dispatch])
 
     const calculateTime = async (date) => {
         var date1 = await new Date();
@@ -44,9 +69,34 @@ export default function Detail() {
     }, [product])
     return (
         <>
+            <>
+                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
+            </>
             <Grid container gap={12} mt={6} pl={2}>
                 <Grid item lg={4}>
-                    <img src={product.image} alt="Product_image" width="100%" height='580vh' style={{ borderRadius: '2vh' }} />
+                    <Grid container columnGap={3.5} rowGap={1}>
+                        <Grid lg={12}>
+                            <div style={{ width: "100%", height: '50vh', borderRadius: '2vh', border: '5px solid rgb(0,0,130)' }}>
+                                <img src={`http://localhost:8000/${product.image}`} alt="Product_image" width="100%" height='100%' />
+                            </div>
+                        </Grid>
+                        <Grid lg={3.5}>
+                            <div style={{ width: "100%", height: '25vh', borderRadius: '2vh', border: '6px solid rgb(130,0,130)' }}>
+                                <img src={`http://localhost:8000/${product.image1}`} alt="Product_image" width="100%" height='100%' style={{}} />
+                            </div>
+                        </Grid>
+                        <Grid lg={3.5}>
+
+                            <div style={{ width: "100%", height: '25vh', borderRadius: '2vh', border: '6px solid rgb(130,0,130)' }}>
+                                <img src={`http://localhost:8000/${product.image2}`} alt="Product_image" width="100%" height='200vh' />
+                            </div>
+                        </Grid>
+                        <Grid lg={3.5}>
+                            <div style={{ width: "100%", height: '25vh', borderRadius: '2vh', border: '6px solid rgb(130,0,130)' }}>
+                                <img src={`http://localhost:8000/${product.image3}`} alt="Product_image" width="100%" height='200vh' />
+                            </div>
+                        </Grid>
+                    </Grid>
                 </Grid>
 
                 <Grid item lg={6}>
@@ -96,7 +146,7 @@ export default function Detail() {
                             {product.detail}
                         </Grid>
                         <Grid item lg={12}>
-                            <Button variant='outlined' fullWidth style={{ borderRadius: '25vh', backgroundColor: 'rgb(0,0,130, .6)', color: 'white', fontWeight: 'bold' }}>Place a bid</Button>
+                            <Button variant='outlined' fullWidth style={{ borderRadius: '25vh', backgroundColor: 'rgb(0,0,130, .6)', color: 'white', fontWeight: 'bold' }} onClick={handleOpen}>Place a bid</Button>
                         </Grid>
                         <Grid item lg={12}>
                             <h4>Bid History</h4>
@@ -105,18 +155,12 @@ export default function Detail() {
                                     product.bids.map((bid) =>
                                         <>
                                             <div style={{ display: 'inline-flex', marginTop: '1vh', flexDirection: 'row', flex: 1, width: '96%', justifyContent: 'center', backgroundColor: 'rgb(0,0,100,.1)', padding: '2vh', borderRadius: '1vh' }}>
-                                                <Avatar style={{ backgroundColor: '#282d6b' }} />
-                                                <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.name}</b></div>
+                                                <Avatar alt={bid.image} src={`http://localhost:8000/${bid.image}`} style={{ backgroundColor: '#282d6b' }} />
+                                                <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.title}</b></div>
                                                 <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
                                                 <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
                                             </div>
-                                            <div style={{ display: 'inline-flex', marginTop: '1vh', flexDirection: 'row', flex: 1, width: '96%', justifyContent: 'center', backgroundColor: 'rgb(0,0,100,.1)', padding: '2vh', borderRadius: '1vh' }}>
-                                                <Avatar style={{ backgroundColor: '#282d6b' }} />
-                                                <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.name}</b></div>
-                                                <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
-                                                <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
-                                            </div>
-
+                                            {console.log(`http://localhost:8000/${bid.image}`)}
                                         </>
                                     )
                                 }
@@ -131,16 +175,7 @@ export default function Detail() {
                     <Grid container rowGap={4}>
                         {
                             allProducts.map(p =>
-                                p.category === product.category && <>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
+                                p.category === product.category && product.user_email !== user.email && <>
                                     <Grid item lg={3}>
                                         <ProductCard product={p} />
                                     </Grid>

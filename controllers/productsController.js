@@ -2,6 +2,7 @@ import Products from "../models/products.js";
 import { initializeApp } from "firebase/app";
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes } from "firebase/storage";
+import * as firebase from 'firebase/app';
 // import { firebase } from "../config.js";
 // import db from "../config.js";
 // import 'firebase/storage';
@@ -9,53 +10,66 @@ import { ref, uploadBytes } from "firebase/storage";
 
 // firebase.database.ServerValue.TIMESTAMP
 
+
+export const postNewBid = async (req, res) => {
+    try {
+        req.body.image = req.file.path
+        console.log(req.body);
+
+        var product = await Products
+            .doc(req.params.id)
+            .get()
+            ;
+
+
+        product = product.data()
+        product.bids.push(req.body);
+
+        var product = await Products
+            .doc(req.params.id)
+            .set(product)
+            ;
+        res.status(200).json({ bid: product });
+    } catch (err) {
+        res.status(200).json({ err: err });
+    }
+}
+
+
 export const registerProducts = async (req, res) => {
     const data = req.body;
     console.log('data', data)
 
-    console.log(req.file)
-    // const choicesArray = data.category.split(',').map(String);
-    // console.log(choicesArray)
 
-    // try {
-    //     const gifts = Gifts.doc();
-    //     await gifts.set({
-    //         image: req.file.originalname,
-    //         description: data.description,
-    //         featured: (data.featured === 'true') ? true : false,
-    //         price: data.price,
-    //         title: data.title,
-    //         expiry: data.expiry,
-    //         category: choicesArray,
-    //         id: gifts.id
-    //     });
-    //     console.log(gifts.id)
+    try {
+        const products = Products.doc();
+        await products.set({
+            image: req.files.file1 ? req.files.file1[0].path : '',
+            image1: req.files.file2 ? req.files.file2[0].path : '',
+            image2: req.files.file3 ? req.files.file3[0].path : '',
+            image3: req.files.file4 ? req.files.file4[0].path : '',
+            detail: data.additionalDetails,
+            featured: (data.featured === 'true') ? true : false,
+            type: data.type,
+            title: data.title,
+            worth: data.worth,
+            user_id: data.user_id,
+            user_email: data.user_email,
+            user_name: data.user_name,
+            name: data.title,
+            stars: data.stars,
+            id: products.id,
+            bids: [],
+            lat: data.lat,
+            long: data.long,
+            expires_at: new Date((new Date()).getDay() + 3, (new Date()).getMonth(), (new Date()).getYear())
+        });
 
-    //     const firebaseConfig = {
-    //         apiKey: process.env.API_KEY,
-    //         authDomain: process.env.AUTH_DOMAIN,
-    //         projectId: process.env.PROJECT_ID,
-    //         storageBucket: process.env.STORAGE_BUCKET,
-    //         messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    //         appId: process.env.APP_ID,
-    //         measurementId: process.env.MEASUREMENT_ID
-    //     };
-    //     // Initialize Firebase
-    //     const app = initializeApp(firebaseConfig);
-    //     const storage = getStorage(app)
-
-    //     const file = req.file;
-    //     const metatype = { contentType: file.mimetype, name: file.originalname };
-    //     const imageRef = ref(storage, `gift-images/${file.originalname}`);
-    //     console.log(req.file)
-    //     console.log('fsfsfsfs')
-    //     console.log(req.file.buffer)
-    //     await uploadBytes(imageRef, file.buffer, metatype)
-
-    //     res.json({ gifts });
-    // } catch (err) {
-    //     res.status(500).json({ message: err.message })
-    // }
+        res.json({ products });
+    } catch (err) {
+        console.log('err', err)
+        res.status(500).json({ message: err.message })
+    }
 }
 
 export const searchItem = async (req, res) => {

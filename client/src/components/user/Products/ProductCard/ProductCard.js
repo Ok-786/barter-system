@@ -15,7 +15,7 @@ import Products from '../Products';
 import PlaceBid from '../../PlaceBid/PlaceBid';
 import { useNavigate } from 'react-router-dom';
 
-const ProductCard = React.memo(({ product }) => {
+const ProductCard = React.memo(({ product, getProducts }) => {
     const [hover, setHover] = React.useState(false);
     const [date, setDate] = React.useState();
     const user = useSelector(state => state.user.user);
@@ -87,7 +87,7 @@ const ProductCard = React.memo(({ product }) => {
     return (
         <div style={{ width: '40vh', cursor: 'pointer' }} >
             <>
-                <PlaceBid open={open} handleOpen={handleOpen} handleClose={handleClose} product={product} />
+                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
             </>
             <Card style={{ paddingInline: '3vh', paddingBottom: '2vh', borderRadius: '15px' }}>
                 <Box
@@ -100,10 +100,11 @@ const ProductCard = React.memo(({ product }) => {
                         height="280vh"
                         width="100%"
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
-                        image={product.image}
+                        image={`http://localhost:8000/${product.image}`}
                         alt="green iguana"
 
                     />
+                    {console.log(`http://localhost:8000/${product.image}`)}
                     {hover ?
                         <div>
                             <Box
@@ -191,7 +192,7 @@ const ProductCard = React.memo(({ product }) => {
                             <Typography variant="h5"><b>{product.name}</b></Typography>
                         </Grid>
                         <Grid item xs={2} >
-                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids.length}</div>
+                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids ? product.bids.length : 0}</div>
                         </Grid>
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>

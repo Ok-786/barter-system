@@ -187,16 +187,7 @@ export default function Products({ search }) {
                             products ? products.map(product =>
                                 product.user_email !== user.email && <>
                                     <Grid item lg={3}>
-                                        <ProductCard product={product} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={product} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={product} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={product} />
+                                        <ProductCard product={product} getProducts={getProducts} />
                                     </Grid>
                                 </>
                             ) :
