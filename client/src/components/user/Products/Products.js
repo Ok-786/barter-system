@@ -10,125 +10,13 @@ import FilterDropDown from './FilterDropDown/FilterDropDown';
 import { addAllProducts } from '../../../Store/Actions/user';
 
 
-const initProducts = [
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asssss',
-        image: '',
-        name: 'product1',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asassss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'assdsss',
-        image: '',
-        name: '234',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asssdsss',
-        image: '',
-        name: 'XDlol',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asssadadsss',
-        image: '',
-        name: 'hola',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'assawaxsss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asssawrdss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'asweadssss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'aswqwedssss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'ass2sadasss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    },
-    {
-        bids: 0,
-        category: 'laptop',
-        expires_at: new Date(1, 23, 23),
-        id: 'assw22421sss',
-        image: '',
-        name: 'Rayzer 5',
-        user_id: '123',
-        user_name: 'Mr. Robot'
-    }
-]
 
-export default function Products({ search }) {
+
+export default function Products({ search, category }) {
     const [products, setProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const user = useSelector(state => state.user.user);
-    const totalProducts = useSelector(state => state.user.allProducts)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -138,8 +26,8 @@ export default function Products({ search }) {
     async function getProducts() {
         setLoading(true)
         const response = await axiosGetAllProducts();
-        console.log('response.data')
-        console.log(response.data.products)
+        console.log('response')
+        console.log(response)
         setProducts(response.data.products);
         setAllProducts(response.data.products);
         setLoading(false)
@@ -170,9 +58,6 @@ export default function Products({ search }) {
                 <br />
                 <br />
                 <br />
-                {/* <div style={{ border: '1px solid rgb(0,0,0,.1)', display: 'inline-flex', justifyContent: 'space-between', padding: '2vh', paddingInline: '5vh', width: '93%', borderRadius: '10vh', marginBottom: '3vh' }}> */}
-                {/* <SearchBar setSearchQuery={setSearchQuery} /> */}
-                {/* </div> */}
                 <div style={{ display: 'flex', width: '100%' }}>
                     <div style={{ flex: 1 }}>
                         <h1>Products</h1>
@@ -186,9 +71,17 @@ export default function Products({ search }) {
                         {
                             products ? products.map(product =>
                                 product.user_email !== user.email && <>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={product} getProducts={getProducts} />
-                                    </Grid>
+                                    {console.log(category, product)}
+                                    {category.toLowerCase() === 'all' &&
+                                        <Grid item lg={3}>
+                                            <ProductCard product={product} getProducts={getProducts} />
+                                        </Grid>
+                                    }
+                                    {product.category && category.toLowerCase() === product.category.toLowerCase() &&
+                                        <Grid item lg={3}>
+                                            <ProductCard product={product} getProducts={getProducts} />
+                                        </Grid>
+                                    }
                                 </>
                             ) :
                                 !loading && (<div style={{ justifyContent: 'center', textAlign: 'center', width: '100%' }}>

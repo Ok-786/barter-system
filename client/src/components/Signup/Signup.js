@@ -2,7 +2,7 @@ import { Button, CircularProgress, TextField, Typography } from '@mui/material'
 import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { signup } from '../../Store/Actions/user';
+import { login, signup } from '../../Store/Actions/user';
 import { axiosSignup } from '../../utils/Api';
 // import { url } from '../../../Api/user';
 // import useHttps from '../../Hooks/use-https';
@@ -16,7 +16,9 @@ const SignupForm = () => {
         email: ' ',
         name: ' ',
         password: ' ',
-        confirmPassword: ' '
+        confirmPassword: ' ',
+        wish_list: [],
+        detail: ''
     }
     const toastOptions = {
         position: "top-right",
@@ -70,7 +72,9 @@ const SignupForm = () => {
                 email: '',
                 name: '',
                 password: '',
-                confirmPassword: ''
+                confirmPassword: '',
+                wish_list: [],
+                detail: ''
             })
 
             toast.error("Please fill all fields!", toastOptions)
@@ -79,16 +83,18 @@ const SignupForm = () => {
 
 
         try {
-            const { data } = await axiosSignup(formInputs);
             setIsLoading(true);
-            dispatch(signup(data));
+            const { data } = await axiosSignup(formInputs);
+            dispatch(login(data));
             setIsLoading(false);
             toast.success("User registered successfully!", toastOptions)
             setFormInputs({
                 email: ' ',
                 name: ' ',
                 password: ' ',
-                confirmPassword: ' '
+                confirmPassword: ' ',
+                wish_list: [],
+                detail: ''
             });
         } catch (err) {
             setIsLoading(false);

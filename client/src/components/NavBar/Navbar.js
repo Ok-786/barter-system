@@ -13,32 +13,27 @@ import SearchBar from "../user/Products/SearchBar/SearchBar";
 import AvatarMenu from "./AvatarMenu";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EmailIcon from '@mui/icons-material/Email';
-
+import AddIcon from '@mui/icons-material/Add';
 
 function Navbar({ setSearchQuery }) {
-  const [click, setClick] = useState(false);
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
   const navItems = ["Home", "addpost"];
   const routeItems = ["/home", "/addpost"];
 
   return (
     <div
-      className={[click && styles["headerFixed"], styles["header"]].join(" ")}
+      className={styles["header"]}
     >
       <div className={styles["logo-nav"]}>
 
-        <p className={[styles["mobile-logo"], styles["logo"]].join(" ")}>
-          <span className={styles["heading"]}>
-            <img src={Logo} width="30vh" height="30vh" alt="" />
-          </span>
+        <p className={styles["logo"]}>
+          <img src={Logo} width="30vh" height="30vh" alt="" />
         </p>
         <h1 style={{ color: 'white', marginLeft: '10px' }}>
           Barter
         </h1>
       </div>
       <ul className={styles["signin-up"]}>
-        <Box sx={{ display: {}, mr: 4 }}>
+        <Box sx={{ mr: 4 }}>
           {navItems.map((item, index) => (
             <Button
               key={item}
@@ -50,24 +45,17 @@ function Navbar({ setSearchQuery }) {
               }}
             >
               <NavLink
-                className={({ isActive }) =>
+                className={() =>
                   styles["not-active"]
                 }
                 to={routeItems[index]}
                 style={{ textDecoration: "none" }}
               >
-                <NavLink
-                  className={({ isActive }) =>
-                    styles["logo-not-active"]
-                  }
-                  to={routeItems[index]}
-                  style={{ textDecoration: "none" }}
-                >
-                  <SquareIcon style={{ fontSize: "1rem" }} /> &nbsp;
-                </NavLink>
                 {
                   item.toLowerCase() === 'addpost' ?
-                    <div style={{ borderBlockStart: '5px solid rgb(0,0,120)', borderBlockEnd: '5px solid rgb(200,0,120)', borderInlineStart: '5px solid rgb(200,0,20)', borderInlineEnd: '5px solid rgb(0,0,120)', borderRadius: '25vh', paddingInline: '2vh' }}>{item}</div>
+                    <div style={{ display: 'inline-flex', flex: 1, alignItem: 'center', justifyCenter: 'center', borderBlockStart: '5px solid rgb(0,0,120)', borderBlockEnd: '5px solid rgb(200,0,120)', borderInlineStart: '5px solid rgb(200,0,20)', borderInlineEnd: '5px solid rgb(0,0,120)', borderRadius: '25vh', paddingInline: '2vh' }}>
+                      {item}
+                    </div>
                     :
                     item
                 }

@@ -31,7 +31,7 @@ export default function WishList() {
     return (
         <>
             <Grid container gap={2} columnGap={12} mt={6} p={6}>
-                <Grid item lg={11.5}>
+                {/* <Grid item lg={11.5}>
                     <div style={{ border: '2px solid rgb(0,0,125)', display: 'inline-flex', backgroundColor: 'rgb(128,0,128,.8)', borderRadius: '25vh', paddingInlineEnd: '5vh', paddingBlock: '1vh', width: '100%' }}>
                         <Avatar style={{ backgroundColor: 'rgb(0,0,129,.5)', width: '15vh', height: '15vh' }} />
                         <div style={{ width: '100%' }}>
@@ -44,7 +44,7 @@ export default function WishList() {
                             <div style={{ color: 'white', marginTop: '-4vh', marginLeft: '3vh' }}>{userDetail.email}</div>
                         </div>
                     </div>
-                </Grid>
+                </Grid> */}
 
                 <Grid item lg={12}>
                     {console.log('allProducts')}
@@ -56,19 +56,11 @@ export default function WishList() {
                                 Currently no product added to wish list
                             </div> :
                             allProducts.map((p, index) =>
-                                userDetail.wish_list.includes(p.id)&&<>
+                                userDetail.wish_list.includes(p.id) && <>
                                     <Grid item lg={3}>
                                         <ProductCard product={p} />
                                     </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
-                                    <Grid item lg={3}>
-                                        <ProductCard product={p} />
-                                    </Grid>
+                                    
                                 </>
                             )
                         }

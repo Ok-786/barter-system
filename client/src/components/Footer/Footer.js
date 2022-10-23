@@ -1,6 +1,5 @@
 import LinkedIn from '@mui/icons-material/LinkedIn'
 import Twitter from '@mui/icons-material/Twitter'
-import { Box } from '@mui/material';
 import React from 'react'
 import styles from './Footer.module.css';
 

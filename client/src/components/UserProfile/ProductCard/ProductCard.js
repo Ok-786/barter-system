@@ -11,10 +11,12 @@ import StarIcon from '@mui/icons-material/Star';
 import { axiosAddFav } from '../../../utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFav } from '../../../Store/Actions/user';
-import { useNavigate } from 'react-router-dom';
 import PlaceBid from '../../user/PlaceBid/PlaceBid';
+import { useNavigate } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const ProductCard = React.memo(({ product }) => {
+const ProductCard = React.memo(({ product, getProducts, isUser }) => {
     const [hover, setHover] = React.useState(false);
     const [date, setDate] = React.useState();
     const user = useSelector(state => state.user.user);
@@ -52,6 +54,14 @@ const ProductCard = React.memo(({ product }) => {
         }
     }
 
+    const deleteProduct = () => {
+
+    }
+
+    const editProduct = () => {
+
+    }
+
     const calculateTime = async (date) => {
         var date1 = await new Date();
         var date2 = await new Date(date);
@@ -83,10 +93,11 @@ const ProductCard = React.memo(({ product }) => {
         return rows
     }
 
+    console.log('product', product)
     return (
         <div style={{ width: '40vh', cursor: 'pointer' }} >
             <>
-                <PlaceBid open={open} handleOpen={handleOpen} handleClose={handleClose} product={product} />
+                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
             </>
             <Card style={{ paddingInline: '3vh', paddingBottom: '2vh', borderRadius: '15px' }}>
                 <Box
@@ -99,29 +110,51 @@ const ProductCard = React.memo(({ product }) => {
                         height="280vh"
                         width="100%"
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
-                        image={product.image}
+                        image={`http://localhost:8000/${product.image}`}
                         alt="green iguana"
 
                     />
+                    {console.log(`http://localhost:8000/${product.image}`)}
                     {hover ?
                         <div>
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    // border: '1px solid black',
-                                    width: '100%',
-                                    height: '100%',
-                                    bgcolor: 'rgb(255,255,255,.8)',
-                                    color: 'purple',
-                                    borderRadius: '20px',
-                                    justifyContent: 'center',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                <Button variant='outlined' onClick={handleOpen} color="secondary" style={{ marginBlock: '50%', borderRadius: '10px' }}><b>Place a Bid</b></Button>
-                            </Box>
+                            {!isUser ?
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        // border: '1px solid black',
+                                        width: '100%',
+                                        height: '100%',
+                                        bgcolor: 'rgb(255,255,255,.8)',
+                                        color: 'purple',
+                                        borderRadius: '20px',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {!isUser && <Button variant='outlined' onClick={handleOpen} color="secondary" style={{ marginBlock: '50%', borderRadius: '10px' }}><b>Place a Bid</b></Button>}
+                                </Box>
+                                :
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        // border: '1px solid black',
+                                        width: '100%',
+                                        height: '100%',
+                                        bgcolor: 'rgb(255,255,255,1)',
+                                        borderRadius: '20px',
+                                        // justifyContent: 'center',
+                                        // textAlign: 'center',
+                                        display: 'grid',
+                                    }}
+                                >
+                                    <Button variant='outlined' onClick={deleteProduct} color="error" style={{ marginTop: '50%', height: '20%', marginInline: '2vh', borderRadius: '10px' }}><b><DeleteIcon /></b></Button>
+                                    <Button variant='outlined' onClick={editProduct} color="secondary" style={{ marginInline: '2vh', marginTop: '-15%', height: '70%', borderRadius: '10px' }}><b><EditIcon /></b></Button>
+                                </Box>
+                            }
                             <Box
                                 sx={{
                                     position: 'absolute',
@@ -184,24 +217,24 @@ const ProductCard = React.memo(({ product }) => {
                         </>
                     }
                 </Box>
-                <div style={{ marginTop: '10px' }} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
-                    <Grid container >
+                <div style={{ marginTop: '10px' }}>
+                    <Grid container onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                         <Grid item xs={10}  >
                             <Typography variant="h5"><b>{product.name}</b></Typography>
                         </Grid>
                         <Grid item xs={2} >
-                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids.length}</div>
+                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids ? product.bids.length : 0}</div>
                         </Grid>
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
-                            <Avatar style={{ backgroundColor: '#281c83' }} />
+                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
                         </Grid>
-                        <Grid item xs={2} >
+                        <Grid item xs={2} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>creator</Typography>
                             <Typography variant="body1" color='grey'><b>{product.user_name}</b></Typography>
                         </Grid>
-                        <Grid item xs={5} >
+                        <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>Worth <b>{product.worth}$</b></Typography>
                             {getStars()}
                         </Grid>

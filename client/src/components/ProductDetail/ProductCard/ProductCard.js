@@ -11,10 +11,10 @@ import StarIcon from '@mui/icons-material/Star';
 import { axiosAddFav } from '../../../utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFav } from '../../../Store/Actions/user';
-import { useNavigate } from 'react-router-dom';
 import PlaceBid from '../../user/PlaceBid/PlaceBid';
+import { useNavigate } from 'react-router-dom';
 
-const ProductCard = React.memo(({ product }) => {
+const ProductCard = React.memo(({ product, getProducts }) => {
     const [hover, setHover] = React.useState(false);
     const [date, setDate] = React.useState();
     const user = useSelector(state => state.user.user);
@@ -83,10 +83,11 @@ const ProductCard = React.memo(({ product }) => {
         return rows
     }
 
+    console.log('product', product)
     return (
         <div style={{ width: '40vh', cursor: 'pointer' }} >
             <>
-                <PlaceBid open={open} handleOpen={handleOpen} handleClose={handleClose} product={product} />
+                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
             </>
             <Card style={{ paddingInline: '3vh', paddingBottom: '2vh', borderRadius: '15px' }}>
                 <Box
@@ -103,6 +104,7 @@ const ProductCard = React.memo(({ product }) => {
                         alt="green iguana"
 
                     />
+                    {console.log(`http://localhost:8000/${product.image}`)}
                     {hover ?
                         <div>
                             <Box
@@ -184,24 +186,24 @@ const ProductCard = React.memo(({ product }) => {
                         </>
                     }
                 </Box>
-                <div style={{ marginTop: '10px' }} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
-                    <Grid container >
+                <div style={{ marginTop: '10px' }}>
+                    <Grid container onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                         <Grid item xs={10}  >
                             <Typography variant="h5"><b>{product.name}</b></Typography>
                         </Grid>
                         <Grid item xs={2} >
-                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids.length}</div>
+                            <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids ? product.bids.length : 0}</div>
                         </Grid>
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
-                            <Avatar style={{ backgroundColor: '#281c83' }} />
+                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
                         </Grid>
-                        <Grid item xs={2} >
+                        <Grid item xs={2} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>creator</Typography>
                             <Typography variant="body1" color='grey'><b>{product.user_name}</b></Typography>
                         </Grid>
-                        <Grid item xs={5} >
+                        <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>Worth <b>{product.worth}$</b></Typography>
                             {getStars()}
                         </Grid>

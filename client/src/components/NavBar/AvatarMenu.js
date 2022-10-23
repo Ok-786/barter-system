@@ -10,34 +10,25 @@ import CategoryIcon from '@mui/icons-material/Category';
 
 export default function AvatarMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorE2, setAnchorE2] = React.useState(null);
   const navigate = useNavigate();
   const user = useSelector(state => state.user.user);
   const login = useSelector(state => state.user.login);
   const dispatch = useDispatch();
 
   const open = Boolean(anchorEl);
-  const open2 = Boolean(anchorE2);
   const handleClick = (event) => {
-    console.log(login)
+    console.log('event.target')
+    console.log(event.target)
     setAnchorEl(event.currentTarget);
   };
-  const handleClick2 = (event) => {
-    setAnchorE2(event.currentTarget);
-  };
+
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const handleClose2 = () => {
-    setAnchorE2(null);
   };
 
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-
-
-
         <Tooltip title="Account settings">
           <IconButton onClick={handleClick} size="small" sx={{ ml: 1 }}>
             <Avatar sx={{ width: 40, height: 38, backgroundColor: 'rgba(17, 22, 91, 0.5)' }} src={'#'} alt="Abdullah Makix" />
@@ -75,8 +66,6 @@ export default function AvatarMenu(props) {
             },
           },
         }}
-      // transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      // anchorOrigin={{ horizontal: 'right',  }}
       >
 
         <MenuItem style={{ width: '200px', }}

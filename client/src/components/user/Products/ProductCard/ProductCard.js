@@ -19,18 +19,19 @@ const ProductCard = React.memo(({ product, getProducts }) => {
     const [hover, setHover] = React.useState(false);
     const [date, setDate] = React.useState();
     const user = useSelector(state => state.user.user);
-    const [fav, setFav] = React.useState(user.wish_list.includes(product.id));
+    const [fav, setFav] = React.useState(user.wish_list && user.wish_list.includes(product.id));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-
+    console.log('user')
+    console.log(user)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     React.useEffect(() => {
-        setFav(user.wish_list.includes(product.id))
-    }, [])
+        setFav(user.wish_list && user.wish_list.includes(product.id))
+    }, [user.wish_list])
     const handleFav = async (isAdd) => {
         if (isAdd) {
             const data = {

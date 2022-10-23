@@ -67,6 +67,7 @@ const navigate = useNavigate()
             product.expires_at && calculateTime(product.expires_at._seconds * 1000)
         }, 1000)
     }, [product])
+    
     return (
         <>
             <>

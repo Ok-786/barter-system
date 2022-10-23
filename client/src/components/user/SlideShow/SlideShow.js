@@ -9,13 +9,6 @@ const delay = 3500;
 
 export default function Slideshow() {
     const [index, setIndex] = useState(0);
-    // const timeoutRef = useRef(null);
-
-    // function resetTimeout() {
-    //     if (timeoutRef.current) {
-    //         clearTimeout(timeoutRef.current);
-    //     }
-    // }
 
     useEffect(() => {
         var timeoutRef = setTimeout(
@@ -27,7 +20,7 @@ export default function Slideshow() {
         );
 
         return () => {
-            clearTimeout(timeoutRef);
+            clearTimeout(timeoutRef); //callback function in react
         };
     }, [index]);
 
@@ -55,7 +48,7 @@ export default function Slideshow() {
                 <h1 style={{ fontSize: '20px', opacity: .6 }}>Just one touch away</h1>
             </div>
             <div className={styles["slideshowDots"]}>
-                {colors.map((_, idx) => (
+                {colors.map((item, idx) => (
                     <div
                         key={idx}
                         className={[styles['slideshowDot'], index === idx && styles["active"]].join(' ')}
