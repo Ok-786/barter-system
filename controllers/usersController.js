@@ -39,7 +39,10 @@ export const signupAdmin = async (req, res) => {
             name,
             email,
             password,
-            role: 'client'
+            role: 'client',
+            detail: '',
+            rating: 0,
+            wish_list: []
         })
     } catch (err) {
         console.log(err)
@@ -51,7 +54,11 @@ export const signupAdmin = async (req, res) => {
     const payload = {
         email,
         role: role,
-        name
+        name,
+        password,
+        detail: '',
+        rating: 0,
+        wish_list: []
     }
     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1hr" });
     return res.status(200).json({ token, user: payload });

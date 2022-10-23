@@ -62,6 +62,7 @@ export const registerProducts = async (req, res) => {
             bids: [],
             lat: data.lat,
             long: data.long,
+            category: data.category,
             expires_at: new Date((new Date()).getDay() + 3, (new Date()).getMonth(), (new Date()).getYear())
         });
 
