@@ -6,7 +6,17 @@ export const url = process.env.NODE_ENV === 'development' && 'http://localhost:8
 export const axiosSignin = async (formData) => await axios.post(`${url}/api/auth/login`, formData);
 export const axiosSignup = async (formData) => await axios.post(`${url}/api/auth/signup`, formData);
 export const axiosGetAllProducts = async (formData) => await axios.get(`${url}/api/products`);
+export const axiosGetAllUsers = async () => await axios.get(`${url}/api/users`);
 export const axiosAddFav = async (formData) => await axios.post(`${url}/api/auth/wishlist/update`, formData);
+export const axiosReportUser = async (formData) => await axios.post(`${url}/api/auth/report`, formData);
+export const axiosIsReport = async (formData) => await axios.post(`${url}/api/auth/getreport`, formData);
+export const axiosReportAction = async (formData) => await axios.post(`${url}/api/auth/reportaction`, formData);
+export const axiosAcceptProduct = async (productId, formData) => await axios.post(`${url}/api/products/bid/accept/${productId}`, formData);
+export const axiosDeleteProduct = async (id) => await axios.delete(`${url}/api/products/delete/${id}`);
+export const axiosEnableChat = async (id, id2) => await axios.post(`${url}/api/auth/chat/enable/${id}`, id2);
+export const axiosGetEnableChat = async (id, id2) => await axios.get(`${url}/api/auth/chat/enable/${id}`);
+export const axiosGetAllChats = async (id, id2) => await axios.get(`${url}/api/auth/chats/`);
+export const axiosSendMessage = async (id, id2) => await axios.post(`${url}/api/auth/chats/${id}`, id2);
 export const axiosAddProduct = async (formData) => await axios({
     url: `${url}/api/products/register`,
     data: formData,
@@ -19,6 +29,13 @@ export const axiosAddBid = async (formData, id) => await axios({
     method: 'post',
     headers: { "Content-Type": "multipart/form-data" },
 });
+export const axiosEditProduct = async (formData, id) => await axios({
+    url: `${url}/api/products/edit/${id}`,
+    data: formData,
+    method: 'post',
+    headers: { "Content-Type": "multipart/form-data" },
+});
+
 
 
 

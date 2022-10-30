@@ -6,22 +6,43 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, IconButton } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { axiosGetAllUsers, axiosReportAction } from '../../utils/Api';
+import { toast } from 'react-toastify';
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function BlockedUsers() {
+    const [users, setUsers] = React.useState([]);
+    const [action, setAction] = React.useState([]);
+
+
+    const getAllUsersHandler = async () => {
+
+        const temp = await axiosGetAllUsers();
+
+        console.log(temp.data)
+        setUsers(temp.data.users);
+    }
+    React.useEffect(() => {
+        getAllUsersHandler();
+    }, [action])
+
+    const handleReport = async (row) => {
+        setAction(false)
+
+        const data = {
+            email: row.email,
+            type: 'remove'
+        }
+        await axiosReportAction(data)
+        toast.success('User status set to active!!')
+
+
+        setAction(true)
+    }
+
     return (
         <div>
             <h2>BlockedUsers</h2>
@@ -36,17 +57,17 @@ export default function BlockedUsers() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
+                        {users.map((row) => (
+                            row.status == false && <TableRow
                                 key={row.name}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row" style={{ display: 'flex', alignItems: 'center' }}>
                                     <Avatar />&nbsp;{row.name}
                                 </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.status === true ? <Button variant='outlined' color="success" size="small"> Active</Button> : <Button variant='outlined' size="small" color="error">Blocked</Button>}</TableCell>
-                                <TableCell align="right"><RemoveIcon color="success" /></TableCell>
+                                <TableCell align="right">{row.email}</TableCell>
+                                <TableCell align="right">{row.status != false ? <Button variant='outlined' color="success" size="small"> Active</Button> : <Button variant='outlined' size="small" color="error">Blocked</Button>}</TableCell>
+                                <TableCell align="right"><IconButton onClick={() => handleReport(row)}><RemoveIcon color="success" /></IconButton></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

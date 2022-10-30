@@ -123,10 +123,6 @@ class Carousel extends React.Component {
       itemSideOffsets
     } = this.props
 
-    // const cWrapperStyle = {
-    //   width: `${_data.length * (itemWidth + (2 * itemSideOffsets))}px`,
-    //   height: `${itemHeight}px`
-    // }
 
     return (
       <div

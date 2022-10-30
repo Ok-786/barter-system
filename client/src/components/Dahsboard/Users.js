@@ -8,20 +8,26 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Avatar, Button } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { axiosGetAllUsers } from '../../utils/Api';
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+
 
 export default function Users() {
+    const [users, setUsers] = React.useState([]);
+    const getAllUsersHandler = async () => {
+
+        const temp = await axiosGetAllUsers();
+
+        console.log(temp.data)
+        setUsers(temp.data.users);
+    }
+
+    React.useEffect(() => {
+        getAllUsersHandler();
+    }, [])
+
+
     return (
         <div>
             <h2>Users</h2>
@@ -36,17 +42,17 @@ export default function Users() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {users.map((row) => (
                             <TableRow
                                 key={row.name}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row" style={{ display: 'flex', alignItems: 'center' }}>
+                                <TableCell style={{ display: 'flex', alignItems: 'center' }}>
                                     <Avatar />&nbsp;{row.name}
                                 </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">1</TableCell>
-                                <TableCell align="right">{row.status === true ? <Button variant='outlined' color="success" size="small"> Active</Button> : <Button variant='outlined' size="small" color="error">Blocked</Button>}</TableCell>
+                                <TableCell align="right">{row.email}</TableCell>
+                                <TableCell align="right">{row.rating ? row.rating : 0}</TableCell>
+                                <TableCell align="right">{row.status != false ? <Button variant='outlined' color="success" size="small"> Active</Button> : <Button variant='outlined' size="small" color="error">Blocked</Button>}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

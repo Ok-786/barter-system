@@ -30,7 +30,14 @@ const userSlice = createSlice({
         },
         ADD_ALL_PRODUCTS(state, action) {
             state.allProducts = action.payload
-        }
+        },
+        DELETE_PRODUCT(state, action) {
+            state.allProducts = state.allProducts.filter((value) => value.id !== action.payload)
+        },
+        EDIT_PRODUCT(state, action) {
+            var objIndex = state.allProducts.findIndex((obj => obj.id == action.payload.id));
+            state.allProducts[objIndex] = action.payload
+        },
     }
 })
 

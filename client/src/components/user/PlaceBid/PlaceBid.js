@@ -34,7 +34,7 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
     const [fileReader, setFileReader] = useState('');
     const user = useSelector(state => state.user.user);
     const navigate = useNavigate();
-    
+
     const formik = useFormik({
         initialValues: {
         },
@@ -42,39 +42,43 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
         onSubmit: async (values) => {
             try {
                 console.log('im clicked')
-                const formData = new FormData();
-                formData.append('category', values.category);
-                formData.append('worth', values.worth);
-                formData.append('title', values.title);
-                formData.append('additionalDetails', values.additionalDetails);
-                formData.append('file', image[0]);
-                formData.append('id', user.id);
-                formData.append('stars', user.rating);
-                formData.append('email', user.email);
-                formData.append('name', user.name);
-                console.log('formData');
-                console.log(values);
-                console.log(image);
+                if (values.category && product.category && (values.category.toLowerCase() == product.category.toLowerCase())) {
+                    const formData = new FormData();
+                    formData.append('category', values.category);
+                    formData.append('worth', values.worth);
+                    formData.append('title', values.title);
+                    formData.append('additionalDetails', values.additionalDetails);
+                    formData.append('file', image[0]);
+                    formData.append('id', user.id);
+                    formData.append('stars', user.rating);
+                    formData.append('email', user.email);
+                    formData.append('name', user.name);
+                    console.log('formData');
+                    console.log(values);
+                    console.log(image);
 
-                var response;
-                console.log('getProducts')
-                console.log(getProducts)
-                try {
-                    response = await axiosAddBid(formData, product.id);
-                    await getProducts();
-                } catch (err) {
-                    console.log("aaa" + err);
-                }
+                    var response;
+                    console.log('getProducts')
+                    console.log(getProducts)
+                    try {
+                        response = await axiosAddBid(formData, product.id);
+                        await getProducts();
+                    } catch (err) {
+                        console.log("aaa" + err);
+                    }
 
-                console.log(response)
-                if (response) {
-                    toast.success("Bid has been Placed!");
-                    navigate('/home')
-                    handleClose()
+                    console.log(response)
+                    if (response) {
+                        toast.success("Bid has been Placed!");
+                        navigate('/home')
+                        handleClose()
+                    } else {
+                        toast.error(response);
+                    }
+                    console.log('im in')
                 } else {
-                    toast.error(response);
+                    toast.error(`The respective item must be a ${product.category}`)
                 }
-                console.log('im in')
                 // props.setRefresh(true);
                 // formik.resetForm();
 
@@ -105,7 +109,11 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
                 <Box sx={style}>
                     <div style={{ justifyContent: 'center', textAlign: 'center', display: 'grid' }}>
                         <label className='labels' style={{ fontSize: '20px' }}>Bid for {product.name}</label>
-                        <label style={{}}>You must bid at least <span style={{ color: 'purple' }}>{product.worth}$</span></label>
+                        {product.type && product.type.toLowerCase() == 'selection' ?
+                            <label style={{}}>You must only bid with any <span style={{ color: 'purple' }}>{product.category}</span></label>
+                            :
+                            <label style={{}}>You must bid at least <span style={{ color: 'purple' }}>{product.worth}$</span></label>
+                        }
                     </div>
                     <div >
                         <form onSubmit={formik.handleSubmit} >

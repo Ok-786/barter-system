@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllProducts, getCurrentUserProducts, postNewBid, registerProducts, searchItem, updateProducts } from "../controllers/productsController.js";
+import { acceptBid, deleteProducts, getAllProducts, getCurrentUserProducts, postNewBid, registerProducts, searchItem, updateProducts } from "../controllers/productsController.js";
 import multer from 'multer'
 import fileUpload from '../middleware/file-Upload.js';
 
@@ -23,6 +23,7 @@ router.post('/register', fileUpload.fields([
     }
 ]), registerProducts);
 router.post('/bid/:id', fileUpload.single('file'), postNewBid);
+router.post('/edit/:id', fileUpload.single('file'), updateProducts);
 
 
 
@@ -30,7 +31,8 @@ router.get('/search/searched', searchItem);
 // router.get('/:id', getGiftsById);
 router.patch('/update', updateProducts);
 router.get('/:id', getCurrentUserProducts);
-// router.delete('/delete/:id', deleteGifts);
+router.delete('/delete/:id', deleteProducts);
+router.post('/bid/accept/:id', acceptBid);
 
 export default router;
 

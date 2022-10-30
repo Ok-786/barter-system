@@ -14,6 +14,8 @@ import AddPost from './pages/AddPost';
 import ProductDetail from './pages/ProductDetail';
 import UserProfile from './pages/UserProfile';
 import WishList from './pages/WishList';
+import ChatBot from './components/ChatBot/ChatBot';
+import Chats from './pages/Chats';
 
 
 const Routes = () => {
@@ -35,6 +37,7 @@ const Routes = () => {
       <ToastContainer />
       <BrowserRouter className="container">
         {login && user.role === 'client' && <Navbar setSearchQuery={setSearchQuery} />}
+        {login && user.role === 'client' && <ChatBot />}
         <Switch className="container">
 
           {
@@ -47,6 +50,7 @@ const Routes = () => {
                     <Route path='/userprofile/:id' element={<UserProfile search={search} />} exact />
                     <Route path='/wishlist/:id' element={<WishList search={search} />} exact />
                     <Route path='/addpost' element={<AddPost search={search} />} exact />
+                    <Route path='/chats' element={<Chats search={search} />} exact />
                     <Route path="/" element={<Navigate to="/home" />} />
                   </>
                   :

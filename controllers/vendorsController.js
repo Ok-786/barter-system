@@ -1,4 +1,4 @@
-import Vendors from "../models/vendors.js";
+import Vendors from "../models/chats.js";
 import { initializeApp } from "firebase/app";
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes } from "firebase/storage";

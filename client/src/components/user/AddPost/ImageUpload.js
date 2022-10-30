@@ -24,8 +24,8 @@ const ImageUpload = (props) => {
             };
             fileReader.readAsDataURL(f);
         })
-        // props.setFileReader(previewUrl)
     }, [file]);
+
     console.log('fileReader')
     console.log(previewUrl)
 
@@ -62,32 +62,18 @@ const ImageUpload = (props) => {
                 onChange={pickedHandler}
             />
 
-            {!props.rounded && <div className={`image-upload ${props.center && 'center'}`}>
-                {previewUrl && <div className="image-upload__preview">
-                    {previewUrl && <img src={previewUrl} alt="Add_Image" />}
+            {!props.rounded &&
+                <div className={`image-upload ${props.center && 'center'}`}>
+                    <Button color='primary' onClick={pickImageHandler}><b>PICK IMAGE</b></Button>
                 </div>}
-
-                {!previewUrl && <Button color='primary' onClick={pickImageHandler}><b>PICK IMAGE</b></Button>}
-
-                {previewUrl && <Button color='primary' onClick={pickImageHandler}><b>CHANGE IMAGE</b></Button>}
-
-
-                {!isValid && <p style={{ textAlign: 'center' }}>{props.errorText}</p>}
-            </div>}
 
             {
                 props.rounded &&
                 <div>
                     <div style={{ marginTop: '-3vh' }}>
-                        {/* <img className="rounded-circle mt-5" width="180px" src={previewUrl} alt="Add_Image" /> */}
                         <br />
-                        <span >
-                            {!previewUrl && <span> <Button variant='outlined' style={{ borderRadius: '20px', }} color='primary' onClick={pickImageHandler}><b>PICK IMAGE</b></Button></span>}
-                            {previewUrl && <span> <Button color='secondary' style={{ borderRadius: '20px' }} variant='outlined' onClick={pickImageHandler} ><b>CHANGE IMAGE</b></Button></span>}
-                        </span>
+                        <span> <Button color='secondary' style={{ borderRadius: '20px' }} variant='outlined' onClick={pickImageHandler} ><b>PICK IMAGE</b></Button></span>
                     </div>
-
-
                 </div>
             }
 

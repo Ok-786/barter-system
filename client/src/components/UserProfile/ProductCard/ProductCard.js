@@ -8,13 +8,16 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Box, Grid } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { axiosAddFav } from '../../../utils/Api';
+import { axiosAddFav, axiosDeleteProduct } from '../../../utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFav } from '../../../Store/Actions/user';
+import { deleteSingleProduct, updateFav } from '../../../Store/Actions/user';
 import PlaceBid from '../../user/PlaceBid/PlaceBid';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import EditProduct from '../EditProduct/EditProduct';
+import sold from '../../../assets/sold.png';
 
 const ProductCard = React.memo(({ product, getProducts, isUser }) => {
     const [hover, setHover] = React.useState(false);
@@ -54,8 +57,14 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
         }
     }
 
-    const deleteProduct = () => {
-
+    const deleteProduct = async () => {
+        try {
+            dispatch(deleteSingleProduct(product))
+            const response = await axiosDeleteProduct(product.id)
+            toast.success('Product deleted!')
+        } catch (err) {
+            toast.error('Product not deleted')
+        }
     }
 
     const editProduct = () => {
@@ -97,7 +106,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
     return (
         <div style={{ width: '40vh', cursor: 'pointer' }} >
             <>
-                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
+                <EditProduct open={open} editProduct={editProduct} handleOpen={handleOpen} handleClose={handleClose} product={product} />
             </>
             <Card style={{ paddingInline: '3vh', paddingBottom: '2vh', borderRadius: '15px' }}>
                 <Box
@@ -110,7 +119,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                         height="280vh"
                         width="100%"
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
-                        image={`http://localhost:8000/${product.image}`}
+                        image={product.bidAccepted?sold:`http://localhost:8000/${product.image}`}
                         alt="green iguana"
 
                     />
@@ -152,7 +161,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                                     }}
                                 >
                                     <Button variant='outlined' onClick={deleteProduct} color="error" style={{ marginTop: '50%', height: '20%', marginInline: '2vh', borderRadius: '10px' }}><b><DeleteIcon /></b></Button>
-                                    <Button variant='outlined' onClick={editProduct} color="secondary" style={{ marginInline: '2vh', marginTop: '-15%', height: '70%', borderRadius: '10px' }}><b><EditIcon /></b></Button>
+                                    <Button variant='outlined' onClick={handleOpen} color="secondary" style={{ marginInline: '2vh', marginTop: '-15%', height: '70%', borderRadius: '10px' }}><b><EditIcon /></b></Button>
                                 </Box>
                             }
                             <Box
@@ -220,7 +229,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                 <div style={{ marginTop: '10px' }}>
                     <Grid container onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                         <Grid item xs={10}  >
-                            <Typography variant="h5"><b>{product.name}</b></Typography>
+                            <Typography variant="h5"><b>{product.title ? product.title : product.name}</b></Typography>
                         </Grid>
                         <Grid item xs={2} >
                             <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids ? product.bids.length : 0}</div>

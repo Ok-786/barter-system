@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Grid } from '@mui/material';
+import { Avatar, Button, Grid, IconButton } from '@mui/material';
 import styles from "./Detail.modules.css";
 import { useLocation } from 'react-router-dom';
 import TimerIcon from '@mui/icons-material/Timer';
@@ -11,19 +11,31 @@ import { axiosGetAllProducts } from '../../utils/Api';
 import { addAllProducts } from '../../Store/Actions/user';
 import PlaceBid from '../user/PlaceBid/PlaceBid';
 import { useNavigate } from 'react-router-dom';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import AcceptBid from './AcceptBid/AcceptBid';
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
 
 export default function Detail() {
     const location = useLocation();
-    const [date, setDate] = useState();
     const product = location.state.product;
+    const [date, setDate] = useState();
     const allProducts = useSelector(state => state.user.allProducts)
     const user = useSelector(state => state.user.user)
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-const navigate = useNavigate()
+
+    const [openBid, setOpenBid] = React.useState(false);
+    const handleOpenBid = () => setOpenBid(true);
+    const handleCloseBid = () => setOpenBid(false);
+
+    const navigate = useNavigate()
+    const [bidAccepted, setBidAccepted] = useState(false)
+    const [selectedBid, setSelectedBid] = useState();
+    const onlineUser = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         window.scrollTo({
@@ -39,6 +51,10 @@ const navigate = useNavigate()
         console.log('response.data')
         setProducts(response.data.products);
     }
+
+    useEffect(() => {
+        product.bidAccepted && setBidAccepted(product.bids[0])
+    })
 
     useEffect(() => {
         getProducts()
@@ -67,12 +83,10 @@ const navigate = useNavigate()
             product.expires_at && calculateTime(product.expires_at._seconds * 1000)
         }, 1000)
     }, [product])
-    
+
     return (
         <>
-            <>
-                <PlaceBid open={open} getProducts={getProducts} handleOpen={handleOpen} handleClose={handleClose} product={product} />
-            </>
+            <PlaceBid open={open} handleOpen={handleOpen} handleClose={handleClose} product={product} />
             <Grid container gap={12} mt={6} pl={2}>
                 <Grid item lg={4}>
                     <Grid container columnGap={3.5} rowGap={1}>
@@ -150,20 +164,34 @@ const navigate = useNavigate()
                             <Button variant='outlined' fullWidth style={{ borderRadius: '25vh', backgroundColor: 'rgb(0,0,130, .6)', color: 'white', fontWeight: 'bold' }} onClick={handleOpen}>Place a bid</Button>
                         </Grid>
                         <Grid item lg={12}>
-                            <h4>Bid History</h4>
+                            <h4>{bidAccepted ? 'Bid Accepted' : 'Bid History'}</h4>
+                            {selectedBid && <AcceptBid productId={product.id} setBidAccepted={setBidAccepted} open={openBid} handleOpen={handleOpenBid} handleClose={handleCloseBid} product={selectedBid} />}
                             <div style={{ maxHeight: '20vh', overflowY: 'scroll', overflowX: 'hidden' }}>
                                 {
-                                    product.bids.map((bid) =>
-                                        <>
-                                            <div style={{ display: 'inline-flex', marginTop: '1vh', flexDirection: 'row', flex: 1, width: '96%', justifyContent: 'center', backgroundColor: 'rgb(0,0,100,.1)', padding: '2vh', borderRadius: '1vh' }}>
-                                                <Avatar alt={bid.image} src={`http://localhost:8000/${bid.image}`} style={{ backgroundColor: '#282d6b' }} />
-                                                <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.title}</b></div>
-                                                <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
-                                                <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
-                                            </div>
-                                            {console.log(`http://localhost:8000/${bid.image}`)}
-                                        </>
-                                    )
+                                    !bidAccepted ?
+                                        (product.bids.map((bid) =>
+                                            <div >
+                                                <div style={{ display: 'inline-flex', marginTop: '1vh', flexDirection: 'row', flex: 1, width: '96%', justifyContent: 'center', backgroundColor: 'rgb(0,0,100,.1)', padding: '2vh', borderRadius: '1vh' }}>
+                                                    <Avatar alt={bid.image} src={`http://localhost:8000/${bid.image}`} style={{ backgroundColor: '#282d6b' }} />
+                                                    <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.title}</b></div>
+                                                    <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
+                                                    <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
+                                                    {product.user_id === onlineUser.id && <IconButton onClick={() => { setSelectedBid(bid); handleOpenBid() }}><ArrowCircleUpIcon color="secondary" fontSize="large" /></IconButton>}
+                                                </div>
+                                            </div>))
+                                        :
+                                        (product.bids.map((bid) =>
+                                            (bid.title ? bidAccepted.title === bid.title : bidAccepted.name === bid.name) &&
+                                            <>
+                                                <div style={{ display: 'inline-flex', marginTop: '1vh', flexDirection: 'row', flex: 1, width: '96%', justifyContent: 'center', backgroundColor: 'rgb(128,0,100,.1)', padding: '2vh', borderRadius: '1vh' }}>
+                                                    <Avatar alt={bid.image} src={`http://localhost:8000/${bid.image}`} style={{ backgroundColor: '#282d6b' }} />
+                                                    <div style={{ float: 'left', flex: 1, marginTop: '1vh', marginLeft: '1vh' }}><b>{bid.title}</b></div>
+                                                    <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
+                                                    <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
+                                                    {product.user_id === onlineUser.id && <IconButton disabled><DonutSmallIcon color="secondary" fontSize="large" /></IconButton>}
+                                                </div>
+                                                {console.log(`http://localhost:8000/${bid.image}`)}
+                                            </>))
                                 }
                             </div>
                         </Grid>
@@ -176,7 +204,7 @@ const navigate = useNavigate()
                     <Grid container rowGap={4}>
                         {
                             allProducts.map(p =>
-                                p.category === product.category && product.user_email !== user.email && <>
+                                p.category === product.category && p.user_email !== user.email && <>
                                     <Grid item lg={3}>
                                         <ProductCard product={p} />
                                     </Grid>

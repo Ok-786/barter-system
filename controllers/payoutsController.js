@@ -1,4 +1,4 @@
-import Payouts from "../models/payouts.js"
+import Payouts from "../models/enabledchats.js"
 
 export const getPayoutsByID = async (req, res) => {
     console.log(req.params)

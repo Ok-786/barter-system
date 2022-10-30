@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { IconButton } from '@mui/material';
 
-export default function FilterDropDown() {
+export default function FilterDropDown({ setDistance }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -40,9 +40,9 @@ export default function FilterDropDown() {
                 }}
 
             >
-                <MenuItem onClick={handleClose}>1 KM</MenuItem>
-                <MenuItem onClick={handleClose}>2 KM</MenuItem>
-                <MenuItem onClick={handleClose}>4 KM</MenuItem>
+                <MenuItem onClick={() => { setDistance(10); handleClose() }}>10 KM</MenuItem>
+                <MenuItem onClick={() => { setDistance(30); handleClose() }}>30 KM</MenuItem>
+                <MenuItem onClick={() => { setDistance(60); handleClose() }}>60 KM</MenuItem>
             </Menu>
         </div>
     );

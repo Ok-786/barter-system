@@ -10,15 +10,15 @@ import { Avatar, Box, Card, CardMedia, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Gallery from './Gallery/Gallery';
 import { axiosAddProduct } from '../../../utils/Api';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddProduct(props) {
     const categories = ['Mobiles', 'Laptop', 'Cars', 'Bikes', 'Cloths', 'Games', 'Pets', 'Decoration']
-    const validationSchema = yup.object({});
     const [isSelection, setIsSelection] = useState(false);
     const [image, setImage] = useState();
     const [fileReader, setFileReader] = useState('');
-    console.log('aaa', fileReader, image)
     const user = useSelector(state => state.user.user);
+    const navigate = useNavigate();
     const [location, setLocation] = useState({
         lat: 0,
         long: 0
@@ -26,8 +26,6 @@ export default function AddProduct(props) {
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function (position) {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
             setLocation({
                 lat: position.coords.latitude,
                 long: position.coords.longitude,
@@ -36,12 +34,9 @@ export default function AddProduct(props) {
     }, [])
 
     const formik = useFormik({
-        initialValues: {
-        },
-        validationSchema: validationSchema,
+        initialValues: {},
         onSubmit: async (values) => {
             try {
-                console.log('im clicked')
                 const formData = new FormData();
                 formData.append('user_id', user.id);
                 formData.append('stars', user.rating);
@@ -58,9 +53,6 @@ export default function AddProduct(props) {
                 formData.append('file4', image[3]);
                 formData.append('long', location.long);
                 formData.append('lat', location.lat);
-                console.log('formData');
-                console.log(values);
-                console.log(image);
 
                 var response;
                 try {
@@ -75,32 +67,13 @@ export default function AddProduct(props) {
                 const parseRes = await response.json();
                 if (parseRes.products) {
                     toast.success("New Product added!");
+                    formik.resetForm();
                 } else {
-
                     toast.error(parseRes);
                 }
-                console.log('im in')
-                // props.setRefresh(true);
-                // props.handleClose()
-                // formik.resetForm();
-
-                // try {
-                //     response = await axiosAddProduct(formData);
-                // } catch (err) {
-                //     console.log("aaa" + err);
-                // }
-
                 console.log(response);
-                if (response === "Staff Created") {
-                    toast.success("New Staff Created!");
-                } else {
-                    toast.error(response);
-                }
-                console.log('im in')
-                props.setRefresh(true);
-                // props.handleClose()
-                // formik.resetForm();
 
+                navigate('/home')
             } catch (error) {
                 console.log(error);
             }
@@ -115,9 +88,9 @@ export default function AddProduct(props) {
             setIsSelection(false)
     }
 
+
     return (
         <div className='full-top-con'>
-            {/* <AddEmployees /> */}
             <form onSubmit={formik.handleSubmit} >
                 <Grid container columnGap={12} style={{ color: 'gray' }}>
 
@@ -184,7 +157,9 @@ export default function AddProduct(props) {
 
                         <Grid container rowGap={2}>
                             <Grid item xs={4} >
-                                <label className="labels" style={{}}>Upload File</label>
+                                <div style={{ marginBottom: '1vh' }}>
+                                    <label className="labels" >Upload File</label>
+                                </div>
                                 <ImageUpload center id="file" name="file" onInput={setImage} setFileReader={setFileReader} rounded={true} errorText="Please provide an image." />
                             </Grid>
                             <Grid item xs={12} style={{ display: 'grid' }}>
@@ -193,8 +168,6 @@ export default function AddProduct(props) {
                                     name="type"
                                     value={formik.values.type}
                                     onChange={(e) => { onSelectHandler(e.target.value); formik.handleChange(e) }}
-                                    // onClick={(e) => console.log(e)}
-                                    // onBlur={handleBlur}
                                     style={{
                                         display: "block", height: '5vh', borderRadius: '5px', border: '1px solid lightgrey', color: formik.values.experience ? 'black' : 'grey', paddingInline: '1vh'
                                     }}
@@ -212,13 +185,11 @@ export default function AddProduct(props) {
                                 </select>
                             </Grid>
                             {isSelection && <Grid item xs={12} style={{ display: 'grid' }}>
-                                <label className="labels" style={{}}>Select Category</label>
+                                <label className="labels" >Select Category</label>
                                 <select
                                     name="category"
                                     value={formik.values.category}
                                     onChange={formik.handleChange}
-                                    // onClick={(e) => console.log(e)}
-                                    // onBlur={handleBlur}
                                     style={{
                                         display: "block", height: '5vh', borderRadius: '5px', border: '1px solid lightgrey', color: formik.values.experience ? 'black' : 'grey', paddingInline: '1vh'
                                     }}
@@ -230,7 +201,6 @@ export default function AddProduct(props) {
                                         categories.map(item => {
                                             return (
                                                 <option value={item} label={item}>
-                                                    {" "}
                                                     {item}
                                                 </option>
                                             )
@@ -240,15 +210,18 @@ export default function AddProduct(props) {
                                 </select>
                             </Grid>}
                             <Grid item xs={12} style={{ display: 'grid' }}>
-                                <label className="labels" style={{}}>Min Worth</label><TextField name="worth" size="small" variant="outlined" type="text" className="form-control" placeholder="worth" value={formik.values.worth} onChange={formik.handleChange} />
+                                <label className="labels" style={{}}>Min Worth</label>
+                                <TextField name="worth" size="small" variant="outlined" type="text" className="form-control" placeholder="worth" value={formik.values.worth} onChange={formik.handleChange} />
                             </Grid>
                             <Grid item xs={12} style={{ display: 'grid' }}>
-                                <label className="labels" style={{}}>Title</label><TextField name="title" size="small" variant="outlined" type="text" className="form-control" placeholder="title" value={formik.values.title} onChange={formik.handleChange} />
+                                <label className="labels" style={{}}>Title</label>
+                                <TextField name="title" size="small" variant="outlined" type="text" className="form-control" placeholder="title" value={formik.values.title} onChange={formik.handleChange} />
                             </Grid>
                             <Grid item xs={12} style={{ display: 'grid' }}>
-                                <label className="labels" style={{}}>Additional Details</label><TextField name="additionalDetails" multiline={true} rows={3} size="small" variant="outlined" type="text" className="form-control" placeholder="Enter additional details" value={formik.values.additionalDetails} onChange={formik.handleChange} />
+                                <label className="labels" style={{}}>Additional Details</label>
+                                <TextField name="additionalDetails" multiline={true} rows={3} size="small" variant="outlined" type="text" className="form-control" placeholder="Enter additional details" value={formik.values.additionalDetails} onChange={formik.handleChange} />
                             </Grid>
-                            <Button fullWidth style={{ backgroundColor: '#282d6b', marginTop: '1vh' }} color="primary" variant="contained" type="submit" >Save Profile</Button>
+                            <Button fullWidth style={{ backgroundColor: '#282d6b', marginTop: '1vh' }} color="primary" variant="contained" type="submit" >Add Product</Button>
                         </Grid>
                     </Grid>
 

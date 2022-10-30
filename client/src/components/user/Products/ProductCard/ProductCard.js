@@ -23,8 +23,7 @@ const ProductCard = React.memo(({ product, getProducts }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log('user')
-    console.log(user)
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -190,7 +189,7 @@ const ProductCard = React.memo(({ product, getProducts }) => {
                 <div style={{ marginTop: '10px' }}>
                     <Grid container onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                         <Grid item xs={10}  >
-                            <Typography variant="h5"><b>{product.name}</b></Typography>
+                            <Typography variant="h5"><b>{product.title ? product.title : product.name}</b></Typography>
                         </Grid>
                         <Grid item xs={2} >
                             <div style={{ background: '#281c83', cursor: 'pointer', borderRadius: '50%', paddingInline: '7px', color: 'white', float: 'right', display: 'flex' }}>{product.bids ? product.bids.length : 0}</div>
@@ -198,14 +197,14 @@ const ProductCard = React.memo(({ product, getProducts }) => {
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
-                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
+                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating, reported: product.reported }, isOther: true } })} />
                         </Grid>
                         <Grid item xs={2} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>creator</Typography>
                             <Typography variant="body1" color='grey'><b>{product.user_name}</b></Typography>
                         </Grid>
                         <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
-                            <Typography variant="body2" color='grey'>Worth <b>{product.worth}$</b></Typography>
+                            <Typography variant="body2" color='grey'>Type: <b>{product.type.toLowerCase() == 'selection' ? product.type : 'Bidding'}</b></Typography>
                             {getStars()}
                         </Grid>
                     </Grid>

@@ -79,3 +79,22 @@ export const addAllProducts = (products) => {
         dispatch(userActions.ADD_ALL_PRODUCTS(products))
     }
 }
+
+
+
+export const deleteSingleProduct = (product) => {
+    return async dispatch => {
+
+        dispatch(userActions.DELETE_PRODUCT(product.id))
+    }
+}
+
+
+export const editSingleProduct = (product) => {
+    return async dispatch => {
+
+        dispatch(userActions.EDIT_PRODUCT(product))
+    }
+}
+
+

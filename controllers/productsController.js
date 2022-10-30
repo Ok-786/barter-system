@@ -54,6 +54,8 @@ export const registerProducts = async (req, res) => {
             title: data.title,
             worth: data.worth,
             user_id: data.user_id,
+            reported: false,
+            noReported: 0,
             user_email: data.user_email,
             user_name: data.user_name,
             name: data.title,
@@ -63,7 +65,7 @@ export const registerProducts = async (req, res) => {
             lat: data.lat,
             long: data.long,
             category: data.category,
-            expires_at: new Date((new Date()).getDay() + 3, (new Date()).getMonth(), (new Date()).getYear())
+            expires_at: new Date((new Date()).getDay() + 1, (new Date()).getMonth(), (new Date()).getYear())
         });
 
         res.json({ products });
@@ -189,26 +191,49 @@ export const getCurrentUserProducts = async (req, res) => {
 }
 
 export const updateProducts = async (req, res) => {
-    const data = req.body;
+    // console.log(req)
+    var data = req.body;
+    var id = req.params.id;
+    if (req.file)
+        data.image = req.file.path
     console.log(data);
 
-    var id;
-    const snapshot = await Gifts.get();
-    snapshot.forEach((doc) => { if (doc.data().title === data.title) id = doc.id }
-        // users.push(doc.data())
-    );
-    // console.log('user')
-    // console.log(user)
-    const user = Gifts.doc(id);
-    const updatedUser = await user.update(data);
-    console.log(updatedUser);
-    res.send({ msg: "gifts updated!" })
+    const snapshot = await Products.get();
+
+    console.log('user')
+    console.log(data, id)
+    const user = Products.doc(id);
+    try {
+        const updatedUser = await user.update(data);
+        console.log(updatedUser);
+    } catch (err) {
+        console.log(err)
+    }
+    res.send({ msg: "Product updated!" })
 }
 
 export const deleteProducts = async (req, res) => {
-    const data = req.body;
-    const deletedUser = await Gifts.doc(id).delete();
+    const id = req.params.id;
+    const deletedProduct = await Products.doc(id).delete();
 
-    res.send({ msg: deletedUser.id ? "Deleted Successfully!" : 'gifts not deleted' })
+    res.json({ msg: deletedProduct.id ? "Deleted Successfully!" : 'gifts not deleted' })
 }
 
+export const acceptBid = async (req, res) => {
+    const id = req.params.id;
+    const data = [];
+    data.push(req.body);
+    console.log('updatedUser22');
+    console.log(req.params);
+
+    const user = Products.doc(id);
+    try {
+        const updatedUser = await user.set({ bids: data, bidAccepted: true }, { merge: true });
+        console.log('updatedUser');
+        console.log(updatedUser);
+        res.json(updatedUser)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}

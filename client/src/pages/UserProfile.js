@@ -9,6 +9,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import FlagIcon from '@mui/icons-material/Flag';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
+import { axiosIsReport, axiosReportUser } from '../utils/Api';
+import { toast } from 'react-toastify';
 
 export default function Detail() {
     const location = useLocation();
@@ -16,8 +18,6 @@ export default function Detail() {
     const [report, setReport] = useState(false);
     const [userDetail, setUserDetail] = useState(location.state.user);
     const allProducts = useSelector(state => state.user.allProducts)
-    console.log('userDetail')
-    console.log(userDetail)
 
     const setUserDetailHandler = (e) => {
         setUserDetail(prevState => ({
@@ -26,6 +26,22 @@ export default function Detail() {
         }))
     }
 
+    const isReported = async () => {
+        const data = {
+            name: 'aaaaaa',
+            email: userDetail.email,
+        }
+        const response = await axiosIsReport(data)
+        console.log('ggggggg', response)
+        setReport(response.data)
+
+    }
+
+
+    useEffect(() => {
+        isReported()
+    }, [])
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -33,6 +49,26 @@ export default function Detail() {
             behavior: "smooth"
         })
     }, [])
+
+    const handleReport = async (isAdd) => {
+        if (isAdd) {
+            const data = {
+                email: userDetail.email,
+                type: 'add'
+            }
+            setReport(true)
+            await axiosReportUser(data)
+            toast.success('User has been added to reported list')
+        } else {
+            const data = {
+                email: userDetail.email,
+                type: 'remove'
+            }
+            setReport(false)
+            await axiosReportUser(data)
+            toast.success('User has been romoved from reported list')
+        }
+    }
 
 
     return (
@@ -55,19 +91,21 @@ export default function Detail() {
                     <div style={{ float: 'right' }}>
                         <div style={{ float: 'right', }}>
                             {
-                                !location.state.isOther ? <IconButton >
-                                    {
-                                        !edit ?
-                                            <EditIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => setEdit(true)} /> :
-                                            <SaveIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => setEdit(false)} />
-                                    }
-                                </IconButton> : <IconButton >
+                                location.state.isOther ? <IconButton >
                                     {
                                         !report ?
-                                            <FlagOutlinedIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => setReport(true)} /> :
-                                            <FlagIcon fontSize='large' style={{ color: 'red' }} onClick={() => setReport(false)} />
+                                            <FlagOutlinedIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => handleReport(true)} /> :
+                                            <FlagIcon fontSize='large' style={{ color: 'red' }} onClick={() => handleReport(false)} />
                                     }
                                 </IconButton>
+                                    :
+                                    <IconButton >
+                                        {
+                                            !edit ?
+                                                <EditIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => setEdit(true)} /> :
+                                                <SaveIcon fontSize='large' style={{ color: 'rgb(0,0,240)' }} onClick={() => setEdit(false)} />
+                                        }
+                                    </IconButton>
                             }
                         </div>
                         <h4>Ratings<span style={{ color: 'rgb(128,0,128)' }}>({userDetail.rating})</span></h4>
@@ -76,7 +114,7 @@ export default function Detail() {
                             size='large'
                             value={userDetail.rating}
                             onChange={setUserDetailHandler}
-                            readOnly={!edit && !location.state.isOther}
+                            readOnly={!location.state.isOther}
                         />
                     </div>
                 </Grid>
@@ -92,15 +130,9 @@ export default function Detail() {
                                     <TextField
                                         style={{ marginTop: '3vh' }}
                                         value={userDetail.name}
-                                        disabled={!edit}
                                         variant={edit ? "outlined" : "standard"}
-                                        InputProps={{
-                                            disableUnderline: !edit,
-                                        }}
                                         name="name"
                                         onChange={setUserDetailHandler}
-
-                                        inputProps={{ style: { WebkitTextFillColor: "black", } }}
                                     />
                                 </div>
                             </div>
@@ -114,16 +146,10 @@ export default function Detail() {
                                     <TextField
                                         style={{ marginTop: '3vh' }}
                                         value={userDetail.name}
-                                        disabled={!edit}
                                         variant={edit ? "outlined" : "standard"}
-                                        InputProps={{
-                                            disableUnderline: !edit,
-                                        }}
                                         type="password"
                                         name="password"
                                         onChange={setUserDetailHandler}
-
-                                        inputProps={{ style: { WebkitTextFillColor: "black", } }}
                                     />
                                 </div>
                             </div>
@@ -138,26 +164,15 @@ export default function Detail() {
                                     value={userDetail.detail}
                                     rows={4}
                                     fullWidth
-                                    disabled={!edit}
                                     variant={edit ? "outlined" : "standard"}
-                                    InputProps={{
-                                        disableUnderline: !edit,
-                                    }}
                                     name="detail"
                                     onChange={setUserDetailHandler}
-                                    sx={{
-                                        "& .MuiInputBase-input.Mui-disabled": {
-                                            WebkitTextFillColor: "black",
-                                        },
-                                    }}
                                 />
                             </div>
                         </Grid>
                     </>
                 }
                 <Grid item lg={12}>
-                    {console.log('allProducts')}
-                    {console.log(allProducts)}
                     <h1>User Products </h1>
                     <Grid container rowGap={4}>
                         {
