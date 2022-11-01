@@ -74,8 +74,8 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
     const calculateTime = async (date) => {
         var date1 = await new Date();
         var date2 = await new Date(date);
-        var diff = await new Date(date2.getTime() - date1.getTime());
-        var days = diff.getUTCDate() - 1; // Gives day count of difference
+        var diff = await new Date(date1.getTime() - date2.getTime());
+        var days = diff.getUTCDate() ; // Gives day count of difference
         var hours = diff.getUTCHours(); // Gives difference as year
         var minutes = diff.getUTCMinutes(); // Gives month count of difference
         var seconds = diff.getUTCSeconds(); // Gives month count of difference

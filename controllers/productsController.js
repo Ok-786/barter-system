@@ -65,7 +65,7 @@ export const registerProducts = async (req, res) => {
             lat: data.lat,
             long: data.long,
             category: data.category,
-            expires_at: new Date((new Date()).getDay() + 1, (new Date()).getMonth(), (new Date()).getYear())
+            expires_at: new Date((new Date()).getDay() + 3, (new Date()).getMonth(), (new Date()).getYear())
         });
 
         res.json({ products });
