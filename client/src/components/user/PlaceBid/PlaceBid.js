@@ -76,11 +76,39 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
                         toast.error(response);
                     }
                     console.log('im in')
-                } else {
+                }
+                else if (product.type.toLowerCase() != "selection") {
+                    const formData = new FormData();
+                    formData.append('category', values.category);
+                    formData.append('worth', values.worth);
+                    formData.append('title', values.title);
+                    formData.append('additionalDetails', values.additionalDetails);
+                    formData.append('file', image[0]);
+                    formData.append('id', user.id);
+                    formData.append('stars', user.rating);
+                    formData.append('email', user.email);
+                    formData.append('name', user.name);
+                    console.log('formData');
+                    console.log(values);
+                    console.log(image);
+
+                    var response;
+                    console.log('getProducts')
+                    console.log(getProducts)
+                    try {
+                        response = await axiosAddBid(formData, product.id);
+                        await getProducts();
+                    } catch (err) {
+                        console.log("aaa" + err);
+                    }
+
+                }
+                else {
                     toast.error(`The respective item must be a ${product.category}`)
                 }
                 // props.setRefresh(true);
                 // formik.resetForm();
+
 
 
             } catch (error) {
@@ -88,6 +116,8 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
             }
         },
     });
+    console.log('productaaaaaaaa')
+    console.log(product)
 
     const onSelectHandler = (e) => {
         console.log(e)

@@ -32,6 +32,7 @@ export default function AcceptBid({ productId, setBidAccepted, open, handleOpen,
 
     const submitHandler = async () => {
         console.log('sfsfsfsfsf')
+        console.log(product)
         setBidAccepted(product);
         handleClose();
 

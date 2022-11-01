@@ -12,11 +12,11 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 export default function NotificationMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   // const navigate = useNavigate();
-  // const user = useSelector(state => state.user.user);
+  const online = useSelector(state => state.user.user);
   // const login = useSelector(state => state.user.login);
   // const dispatch = useDispatch();
 
-  const online = JSON.parse(localStorage.getItem('user'));
+  // const online = JSON.parse(localStorage.getItem('user'));
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -35,7 +35,10 @@ export default function NotificationMenu(props) {
         <Tooltip title="Account settings">
           <IconButton onClick={handleClick} size="small" sx={{ ml: 1 }}>
             {/* <Avatar sx={{ width: 40, height: 38, backgroundColor: 'rgba(17, 22, 91, 0.5)' }} src={'#'} alt="Abdullah Makix" /> */}
-            <NotificationsIcon style={{ color: "white", marginTop: '0vh', marginLeft: '2vh' }} />
+            <div style={{ position: 'relative' }}>
+              {online.wish_list.length !== 0 && <div style={{ marginLeft: '80%', position: 'absolute', color: 'white', backgroundColor: 'red', borderRadius: '50%', fontSize: '12px', paddingInline: '.5vh', paddingBlock: '.3vh' }}>{online.wish_list.length}</div>}
+              <NotificationsIcon style={{ color: "white", marginTop: '0vh', marginLeft: '2vh' }} />
+            </div>
           </IconButton>
         </Tooltip>
       </Box>
@@ -71,19 +74,19 @@ export default function NotificationMenu(props) {
           },
         }}
       >
-        {online.wishlist ? online.wishList(item => {
-          <>
-            <MenuItem style={{ width: '400px', }}
+        {online.wish_list ? online.wish_list.map(item => {
+          return <>
+            <MenuItem style={{ width: '450px', }}
 
             >
-              <p style={{ fontSize: 11 }}>{item.title ? item.title : item.name} has been added to your wishlist</p>
+              <p style={{ fontSize: 11 }}>New Product with id: {item} has been added to your wishlist</p>
             </MenuItem>
             <Divider />
           </>
         })
           :
           <>
-            <MenuItem style={{ width: '400px', }}
+            <MenuItem style={{ width: '450px', }}
 
             >
               <p style={{ fontSize: 11 }}>No latest Notifications yet</p>
