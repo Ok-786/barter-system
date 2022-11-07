@@ -98,3 +98,11 @@ export const editSingleProduct = (product) => {
 }
 
 
+export const changeDealStatus = (status) => {
+    return async dispatch => {
+
+        dispatch(userActions.CHANGE_DEAL_STATUS(status))
+    }
+}
+
+

@@ -90,11 +90,11 @@ export default function AvatarMenu(props) {
           </ListItemIcon>
           WishList
         </MenuItem>
-        <MenuItem style={{}}>
+        <MenuItem style={{}} onClick={() => { dispatch(signout()); localStorage.removeItem('auth_token'); navigate('/') }}>
           <ListItemIcon>
             <ExitToAppIcon fontSize="small" />
           </ListItemIcon>
-          <span onClick={() => { dispatch(signout()); localStorage.removeItem('auth_token'); navigate('/') }}>Logout</span>
+          <span >Logout</span>
         </MenuItem>
       </Menu>
 

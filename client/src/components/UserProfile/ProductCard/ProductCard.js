@@ -75,7 +75,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
         var date1 = await new Date();
         var date2 = await new Date(date);
         var diff = await new Date(date1.getTime() - date2.getTime());
-        var days = diff.getUTCDate() ; // Gives day count of difference
+        var days = diff.getUTCDate(); // Gives day count of difference
         var hours = diff.getUTCHours(); // Gives difference as year
         var minutes = diff.getUTCMinutes(); // Gives month count of difference
         var seconds = diff.getUTCSeconds(); // Gives month count of difference
@@ -91,16 +91,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
         }, 1000)
     }, [product])
 
-    const getStars = () => {
-        let rows = []
-        for (var i = 1; i <= 5; i++) {
-            if (i < product.stars)
-                rows.push(<StarIcon color="secondary" fontSize='small' />)
-            else
-                rows.push(<StarBorderIcon color="secondary" fontSize='small' />)
-        }
-        return rows
-    }
+
 
     console.log('product', product)
     return (
@@ -119,7 +110,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                         height="280vh"
                         width="100%"
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
-                        image={product.bidAccepted?sold:`http://localhost:8000/${product.image}`}
+                        image={product.bidAccepted ? sold : `http://localhost:8000/${product.image}`}
                         alt="green iguana"
 
                     />
@@ -178,10 +169,11 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                                     justifyContent: 'center',
                                     textAlign: 'center',
                                 }}
-                            >
+                            >{console.log('product.bidAccepted')}
+                                {console.log(!(!!product.bidAccepted))}
                                 {
-                                    fav ? <StarIcon fontSize='large' onClick={() => handleFav(false)} /> :
-                                        <StarBorderIcon fontSize='large' onClick={() => handleFav(true)} />
+                                    !(!!product.bidAccepted) && (fav ? <StarIcon fontSize='large' onClick={() => handleFav(false)} /> :
+                                        <StarBorderIcon fontSize='large' onClick={() => handleFav(true)} />)
                                 }
                             </Box>
                         </div> :
@@ -219,8 +211,8 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                                 }}
                             >
                                 {
-                                    fav ? <StarIcon fontSize='large' onClick={() => handleFav(false)} /> :
-                                        <StarBorderIcon fontSize='large' onClick={() => handleFav(true)} />
+                                    !(!!product.bidAccepted) && (fav && !product.bidAccepted ? <StarIcon fontSize='large' onClick={() => handleFav(false)} /> :
+                                        <StarBorderIcon fontSize='large' onClick={() => handleFav(true)} />)
                                 }
                             </Box>
                         </>
@@ -237,7 +229,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                     </Grid>
                     <Grid container gap={2} style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
-                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 100 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
+                            <Avatar style={{ backgroundColor: '#281c83', zIndex: 2 }} onClick={() => navigate(`/userprofile/${user.id}`, { state: { user: { name: product.user_name, email: product.user_email, detail: product.detail, rating: product.user_rating }, isOther: true } })} />
                         </Grid>
                         <Grid item xs={2} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>creator</Typography>
@@ -245,7 +237,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                         </Grid>
                         <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>Worth <b>{product.worth}$</b></Typography>
-                            {getStars()}
+
                         </Grid>
                     </Grid>
                 </div>

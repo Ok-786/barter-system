@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { firebase } from '../config.js';
+// import { firebase } from '../config.js';
 import User from "../models/users.js";
 import Chat from '../models/chats.js';
 import EnabledChats from '../models/enabledchats.js';
@@ -118,8 +118,6 @@ export const updateReportedUser = async (req, res) => {
                 .get()
                 ;
 
-
-            // user = user.data()
 
             var id = ''
             var noReports = 0;
@@ -347,19 +345,7 @@ export const getEnabledUsers = async (req, res) => {
 
 export const getChats = async (req, res) => {
 
-    // try {
-    //     var chat = await Chat
-    //         .where('sender', '==', `${sender}`)
-    //         .where('receiver', '==', `${receiver}`)
-    //         .get();
-    //     console.log('docRef')
-    //     const id = chat.docs[0].id
-    //     chat = chat.docs[0].data()
-    //     user['id'] = id
-    // } catch (err) {
-    //     console.log(err)
-    //     return res.status(500).json("Server Error1!");
-    // }
+    
     try {
         const snapshot = await Chat.get()
         console.log('a', snapshot.docs.map(doc => doc.data()))

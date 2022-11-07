@@ -13,6 +13,8 @@ export const axiosIsReport = async (formData) => await axios.post(`${url}/api/au
 export const axiosReportAction = async (formData) => await axios.post(`${url}/api/auth/reportaction`, formData);
 export const axiosAcceptProduct = async (productId, formData) => await axios.post(`${url}/api/products/bid/accept/${productId}`, formData);
 export const axiosDeleteProduct = async (id) => await axios.delete(`${url}/api/products/delete/${id}`);
+export const axiosDeleteFeedback = async (id) => await axios.delete(`${url}/api/products/feedback/delete/${id}`);
+export const axiosEditFeedback = async (id, data) => await axios.post(`${url}/api/products/feedback/edit/${id}`, data);
 export const axiosEnableChat = async (id, id2) => await axios.post(`${url}/api/auth/chat/enable/${id}`, id2);
 export const axiosGetEnableChat = async (id, id2) => await axios.get(`${url}/api/auth/chat/enable/${id}`);
 export const axiosGetAllChats = async (id, id2) => await axios.get(`${url}/api/auth/chats/`);
@@ -35,6 +37,13 @@ export const axiosEditProduct = async (formData, id) => await axios({
     method: 'post',
     headers: { "Content-Type": "multipart/form-data" },
 });
+
+
+
+
+export const axiosPostFeedback = async (formData, id) => await axios.post(`${url}/api/products/feedback/${id}`, formData);
+export const axiosGetAllFeedback = async () => await axios.get(`${url}/api/products/feedback`);
+
 
 
 

@@ -10,10 +10,7 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-const firebase = admin.storage()
-console.log('firebase initialized')
 export default db
-export { firebase }
 
 
 

@@ -38,6 +38,9 @@ const userSlice = createSlice({
             var objIndex = state.allProducts.findIndex((obj => obj.id == action.payload.id));
             state.allProducts[objIndex] = action.payload
         },
+        CHANGE_DEAL_STATUS(state, action) {
+            state.user.deal = action.payload;
+        }
     }
 })
 

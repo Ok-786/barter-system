@@ -1,15 +1,6 @@
 import Products from "../models/products.js";
-import { initializeApp } from "firebase/app";
-import { getStorage } from 'firebase/storage';
-import { ref, uploadBytes } from "firebase/storage";
-import * as firebase from 'firebase/app';
-// import { firebase } from "../config.js";
-// import db from "../config.js";
-// import 'firebase/storage';
-// firebase = firebase.ref()
-
-// firebase.database.ServerValue.TIMESTAMP
-
+import Users from "../models/users.js";
+import Feedback from "../models/feedback.js";
 
 export const postNewBid = async (req, res) => {
     try {
@@ -118,7 +109,6 @@ export const getProductsById = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try {
-        var count = await Products.get();
         const products = [];
         var snapshot;
         snapshot = await Products
@@ -138,57 +128,57 @@ export const getAllProducts = async (req, res) => {
     }
 }
 
-export const getCurrentUserProducts = async (req, res) => {
-    try {
-        // const docRef = Gifts.doc(req.id);
-        // const prevSnapshot = await docRef.get();
-        // const users = [];
-        // const snapshot = await Gifts
-        //     .orderBy('id')
-        //     .startAfter(prevSnapshot)
-        //     .limit(5)
-        //     .get();
-        // snapshot.forEach((doc) =>
-        //     users.push(doc.data())
-        // );
-        // console.log(users)
-        // res.json(users);
-        var count = await Gifts.get();
-        count = count.size;
-        const users = [];
-        var limit = (req.query.rows && !req.query.rows == "undefined") ? req.query.rows : 5;
-        var snapshot;
-        var id = req.params.id
-        // var id = req.params.id ? console.log('req.params.id') : false
-        console.log(id == 'false')
-        if (id == 'false') {
-            console.log('aaaaa')
-            snapshot = await Gifts
-                .orderBy('id')
-                .limit(limit)
-                .get();
-        } else {
-            console.log('bbbbb')
-            const docRef = Gifts.doc(req.params.id);
-            const prevSnapshot = await docRef.get();
-            snapshot = await Gifts
-                .orderBy('id')
-                .startAfter(prevSnapshot)
-                .limit(limit)
-                .get();
-        }
+// export const getCurrentUserProducts = async (req, res) => {
+//     try {
+//         // const docRef = Gifts.doc(req.id);
+//         // const prevSnapshot = await docRef.get();
+//         // const users = [];
+//         // const snapshot = await Gifts
+//         //     .orderBy('id')
+//         //     .startAfter(prevSnapshot)
+//         //     .limit(5)
+//         //     .get();
+//         // snapshot.forEach((doc) =>
+//         //     users.push(doc.data())
+//         // );
+//         // console.log(users)
+//         // res.json(users);
+//         var count = await Gifts.get();
+//         count = count.size;
+//         const users = [];
+//         var limit = (req.query.rows && !req.query.rows == "undefined") ? req.query.rows : 5;
+//         var snapshot;
+//         var id = req.params.id
+//         // var id = req.params.id ? console.log('req.params.id') : false
+//         console.log(id == 'false')
+//         if (id == 'false') {
+//             console.log('aaaaa')
+//             snapshot = await Gifts
+//                 .orderBy('id')
+//                 .limit(limit)
+//                 .get();
+//         } else {
+//             console.log('bbbbb')
+//             const docRef = Gifts.doc(req.params.id);
+//             const prevSnapshot = await docRef.get();
+//             snapshot = await Gifts
+//                 .orderBy('id')
+//                 .startAfter(prevSnapshot)
+//                 .limit(limit)
+//                 .get();
+//         }
 
-        snapshot.forEach((doc) =>
-            users.push(doc.data())
-        );
-        console.log(users)
-        res.json({ users, count });
+//         snapshot.forEach((doc) =>
+//             users.push(doc.data())
+//         );
+//         console.log(users)
+//         res.json({ users, count });
 
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ message: err.message })
-    }
-}
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).json({ message: err.message })
+//     }
+// }
 
 export const updateProducts = async (req, res) => {
     // console.log(req)
@@ -196,12 +186,7 @@ export const updateProducts = async (req, res) => {
     var id = req.params.id;
     if (req.file)
         data.image = req.file.path
-    console.log(data);
 
-    const snapshot = await Products.get();
-
-    console.log('user')
-    console.log(data, id)
     const user = Products.doc(id);
     try {
         const updatedUser = await user.update(data);
@@ -216,24 +201,145 @@ export const deleteProducts = async (req, res) => {
     const id = req.params.id;
     const deletedProduct = await Products.doc(id).delete();
 
-    res.json({ msg: deletedProduct.id ? "Deleted Successfully!" : 'gifts not deleted' })
+    res.json({ msg: deletedProduct.id ? "Deleted Successfully!" : 'product not deleted' })
 }
 
 export const acceptBid = async (req, res) => {
     const id = req.params.id;
     const data = [];
     data.push(req.body);
-    console.log('updatedUser22');
-    console.log(req.params);
 
-    const user = Products.doc(id);
+
+
+    const product = Products.doc(id);
     try {
-        const updatedUser = await user.set({ bids: data, bidAccepted: true }, { merge: true });
-        console.log('updatedUser');
-        console.log(updatedUser);
-        res.json(updatedUser)
+        var user = await Users
+            .where('email', '==', `${req.body.email}`)
+            .get();
+        const user_id = user.docs[0].id;
+        user = Users.doc(user_id)
+        const updatedUser = await user.set({ deal: id }, { merge: true });
+
+        const updatedProduct = await product.set({ bids: data, bidAccepted: true }, { merge: true });
+        res.json(user)
     } catch (err) {
         console.log(err)
         res.json(err)
     }
+}
+
+
+export const postFeedback = async (req, res) => {
+    const { feedback, user_id } = req.body;
+    const r = req.body.rating
+    const { id } = req.params;
+
+    try {
+
+
+
+        var product = await Users
+            .doc(user_id)
+            .get();
+        product = product.data()
+
+
+        const rat = (parseInt(r) + parseInt(product.rating)) / 2
+
+
+
+        var user = await Products
+
+            .where('id', '==', `${id}`)
+            .get();
+        const us = user.docs[0].data();
+        var user3 = await Users.doc(us.user_id)
+        var updatedUser = await user3.set({ stars: rat, rating: rat }, { merge: true });
+
+        const products = Feedback.doc();
+        await products.set({
+            rating: r,
+            feedback,
+            product_id: id,
+            id: products.id,
+            email: us.user_email
+        })
+        console.log(products)
+
+
+        var user3 = await Products.doc(id)
+        var updatedUser = await user3.set({ stars: rat, rating: rat }, { merge: true });
+
+
+
+        const user2 = Users.doc(user_id);
+        var updatedUser2 = await user2.set({ deal: false }, { merge: true });
+
+
+        res.json(products)
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+
+
+}
+
+
+
+
+export const getAllFeedback = async (req, res) => {
+    try {
+        const feedbacks = [];
+        var snapshot = await Feedback
+            .get();
+
+
+        snapshot.forEach((doc) =>
+            feedbacks.push(doc.data())
+        );
+        console.log(feedbacks)
+        res.json({ feedbacks });
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    }
+}
+
+
+export const deleteFeedback = async (req, res) => {
+    const id = req.params.id;
+    const deletedProduct = await Feedback.doc(id).delete();
+    res.json({ msg: deletedProduct.id ? "Deleted Successfully!" : 'feedback not deleted' })
+}
+
+export const editFeedback = async (req, res) => {
+    var data = req.body;
+    var id = req.params.id;
+
+
+    console.log('user')
+    console.log(data, id)
+    try {
+        var user = await Users
+
+            .where('email', '==', `${data.email}`)
+            .get();
+        console.log('user.docs[0]')
+        console.log(user.docs[0])
+        const us = user.docs[0].data();
+        var user3 = await Users.doc(user.docs[0].id)
+        var updatedUser = await user3.set({ stars: (parseInt(data.rating) + parseInt(us.stars)) / 2, rating: (parseInt(data.rating) + parseInt(us.rating)) / 2 }, { merge: true });
+
+
+
+
+        user = await Feedback.doc(id);
+        updatedUser = await user.update({ feedback: data.feedback });
+        console.log(updatedUser);
+    } catch (err) {
+        console.log(err)
+    }
+    res.send({ msg: "Feedback updated!" })
 }

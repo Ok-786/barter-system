@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { axiosGetAllChats, axiosGetEnableChat, axiosSendMessage } from '../utils/Api'
 import SendIcon from '@mui/icons-material/Send';
 import welcome from '../assets/welcome.gif'
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Chats() {
   // const [users, setUsers] = useState([])
@@ -12,6 +12,7 @@ export default function Chats() {
   const [userNames, setUserNames] = useState([])
   const [message, setMessage] = useState('');
   const [selectedUser, setSelectedUser] = useState()
+  const [hover, setHover] = useState(false)
 
   const setMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -27,22 +28,13 @@ export default function Chats() {
     console.log(receiver, sender)
     const data = { receiver, message }
     await axiosSendMessage(sender, data);
-    // } catch (err) {
-    //   console.log(err)
-    // }
     setMessage('')
   }
 
 
-  console.log('useraaa  s')
-  // console.log(users)
   const getEnabledUsers = async () => {
     try {
-      // console.log('users')
       const temp = await axiosGetEnableChat(online.email)
-      // console.log('users')
-      // console.log(temp)
-      // const uniq = [...new Set(temp.data)];
       var uniq = temp.data.filter((value, index, self) =>
         index === self.findIndex((t) => (
           t.users[0] === value.users[0] && t.users[1] === value.users[1]
@@ -72,20 +64,18 @@ export default function Chats() {
     setSelectedUser(item)
     const receiver = item;
     var chats = await axiosGetAllChats()
-    console.log('chats')
-    console.log(chats.data)
     var temp = chats.data.map((chat) => {
       if ((chat.sender === receiver && chat.receiver === online.email) || (chat.sender === online.email && chat.receiver === receiver)) {
         console.log('qqqq')
         if (chat.sender === receiver) {
           return ({
             message: chat.message,
-            user: 'receiver'
+            user: 'receiver',
           })
         } else {
           return ({
             message: chat.message,
-            user: 'sender'
+            user: 'sender',
           })
         }
       }
@@ -105,6 +95,18 @@ export default function Chats() {
     getEnabledUsers()
   }, [])
 
+  const setDeleteMessageHandler = (chat) => {
+    var filtered = allChats.filter(function (el) { return el.message != chat.message });
+    console.log(filtered)
+    setAllChats(filtered)
+  }
+
+  const onDeleteHandler = (chat) => {
+    var filtered = userNames.filter(function (el) { return el != chat });
+    setUserNames(filtered)
+
+  }
+
 
   return (
     <>
@@ -114,9 +116,16 @@ export default function Chats() {
             <div style={{ textAlign: 'center', color: 'white', backgroundColor: 'black', borderRadius: '25px' }}><h2>Contact List</h2></div>
             {
               userNames.length !== 0 && userNames.map((item) =>
-                <div onClick={() => getChats(item)} style={{ cursor: 'pointer', display: 'inline-flex', backgroundColor: 'rgb(128,0,120, 1)', borderRadius: '10px', margin: '8px', paddingInline: '15px', width: '70%', color: 'white', paddingBlock: '15px', }}>
-                  <Avatar /><h4 style={{ marginTop: '7px', marginLeft: '5px' }}>{item}</h4>
-                </div>)
+                <>
+                  <div style={{ cursor: 'pointer', display: 'inline-flex', backgroundColor: 'rgb(128,0,120, 1)', borderRadius: '10px', margin: '8px', paddingInline: '15px', width: '70%', color: 'white', paddingBlock: '15px', }}>
+                    <div style={{ float: 'left', width: '90%' }} onClick={() => getChats(item)}>
+                      <Avatar /><h4 style={{ marginTop: '-35px', marginLeft: '1px' }}>{item}</h4>
+                    </div>
+                    <div style={{ float: 'right', width: '10%', zIndex: 999 }}>
+                      {selectedUser !== item && <DeleteIcon fontSize='large' onClick={() => onDeleteHandler(item)} />}
+                    </div>
+                  </div>
+                </>)
             }
           </div>
         </Grid>
@@ -129,26 +138,25 @@ export default function Chats() {
             {
               allChats && allChats.map((chat) =>
                 <>
-                  {chat.user == 'sender' ?
-                    <div style={{ display: 'block' }}>
-                      <div style={{ backgroundColor: 'rgb(0,0,118)', color: 'white', float: 'left', borderRadius: '25vh', paddingInline: '2vh', paddingBlock: '1vh' }}>
-                        {chat.message}
+                  <div onClick={() => setDeleteMessageHandler(chat)} style={{ cursor: 'pointer' }} onMouseEnter={() => setHover(chat.message)} onMouseLeave={() => setHover(false)}>
+                    {chat.user == 'sender' ?
+                      <div style={{ display: 'block' }} >
+                        <div style={{ backgroundColor: hover == chat.message ? 'rgb(128,0,30)' : 'rgb(0,0,118)', color: 'white', float: 'left', borderRadius: '25vh', paddingInline: '2vh', paddingBlock: '1vh' }}>
+                          {chat.message}
+                        </div>
                       </div>
-                      <br />
-                      <br />
-                      <br />
-                    </div>
-                    :
-                    <>
-                      <div style={{ display: 'block', backgroundColor: 'black', color: 'white', borderRadius: '25vh', float: 'right', paddingInline: '2vh', paddingBlock: '1vh' }}>
-                        {chat.message}
-                      </div>
-                      <br />
-                      <br />
-                      <br />
-                    </>
-                  }
+                      :
+                      <>
+                        <div style={{ display: 'block', backgroundColor: hover == chat.message ? 'rgb(128,0,30)' : 'black', color: 'white', borderRadius: '25vh', float: 'right', paddingInline: '2vh', paddingBlock: '1vh' }}>
+                          {chat.message}
+                        </div>
+                      </>
+                    }
 
+                  </div>
+                  <br />
+                  <br />
+                  <br />
                 </>
               )}
 

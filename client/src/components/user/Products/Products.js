@@ -105,7 +105,7 @@ export default function Products({ search, category }) {
                     <Grid container rowGap={6} >
                         {
                             products ? products.map(product =>
-                                product.user_email !== user.email &&
+                                product.user_email !== user.email && !product.bidAccepted &&
                                 product.long && calcCrow(location.lat, location.long, product.lat, product.long) <= distance &&
                                 <>
                                     {console.log(category, product)}

@@ -5,10 +5,10 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Avatar, Box, Grid } from '@mui/material';
+import { Avatar, Box, Grid, Rating } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { axiosAddFav } from '../../../../utils/Api';
+import { axiosAddFav, axiosGetAllUsers } from '../../../../utils/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFav } from '../../../../Store/Actions/user';
 import Products from '../Products';
@@ -22,7 +22,34 @@ const ProductCard = React.memo(({ product, getProducts }) => {
     const [fav, setFav] = React.useState(user.wish_list && user.wish_list.includes(product.id));
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [users, setUsers] = React.useState([]);
+    var currentUser = users.filter(u => {
+        if (u.email === product.user_email)
+            return u
+    })
+    const [stars, setStars] = React.useState(currentUser[0] ? currentUser[0].stars : 0)
 
+    const getAllUsersHandler = async () => {
+
+        const temp = await axiosGetAllUsers();
+
+        console.log(temp.data)
+        setUsers(temp.data.users);
+    }
+
+    React.useEffect(() => {
+        getAllUsersHandler();
+    }, [])
+
+    React.useEffect(() => {
+        var currentUser = users.filter(u => {
+            if (u.email === product.user_email)
+                return u
+        })
+
+        currentUser.length !== 0 && setStars(currentUser[0].stars);
+
+    }, [users])
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -76,7 +103,7 @@ const ProductCard = React.memo(({ product, getProducts }) => {
     const getStars = () => {
         let rows = []
         for (var i = 1; i <= 5; i++) {
-            if (i < product.stars)
+            if (i < stars)
                 rows.push(<StarIcon color="secondary" fontSize='small' />)
             else
                 rows.push(<StarBorderIcon color="secondary" fontSize='small' />)
@@ -205,7 +232,12 @@ const ProductCard = React.memo(({ product, getProducts }) => {
                         </Grid>
                         <Grid item xs={5} onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}>
                             <Typography variant="body2" color='grey'>Type: <b>{product.type.toLowerCase() == 'selection' ? product.type : 'Bidding'}</b></Typography>
-                            {getStars()}
+                            <Rating
+                                name="rating"
+                                size='large'
+                                value={Math.floor(stars)}
+                                readOnly={true}
+                            />
                         </Grid>
                     </Grid>
                 </div>

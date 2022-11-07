@@ -53,8 +53,10 @@ export default function Detail() {
     }
 
     useEffect(() => {
+        console.log('product.bidAccepted')
+        console.log(product.bidAccepted)
         product.bidAccepted && setBidAccepted(product.bids[0])
-    })
+    }, [])
 
     useEffect(() => {
         getProducts()
@@ -161,7 +163,7 @@ export default function Detail() {
                             {product.detail}
                         </Grid>
                         <Grid item lg={12}>
-                            <Button variant='outlined' fullWidth style={{ borderRadius: '25vh', backgroundColor: 'rgb(0,0,130, .6)', color: 'white', fontWeight: 'bold' }} onClick={handleOpen}>Place a bid</Button>
+                            {!product.bidAccepted && product.user_email !== onlineUser.email && <Button variant='outlined' fullWidth style={{ borderRadius: '25vh', backgroundColor: 'rgb(0,0,130, .6)', color: 'white', fontWeight: 'bold' }} onClick={handleOpen}>Place a bid</Button>}
                         </Grid>
                         <Grid item lg={12}>
                             <h4>{bidAccepted ? 'Bid Accepted' : 'Bid History'}</h4>
@@ -204,7 +206,7 @@ export default function Detail() {
                     <Grid container rowGap={4}>
                         {
                             allProducts.map(p =>
-                                p.category === product.category && p.user_email !== user.email && <>
+                                p.category === product.category && p.user_email !== user.email && !p.bidAccepted && <>
                                     <Grid item lg={3}>
                                         <ProductCard product={p} />
                                     </Grid>

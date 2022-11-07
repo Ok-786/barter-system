@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
 import { axiosAcceptProduct, axiosEnableChat } from '../../../utils/Api';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const style = {
     position: 'absolute',
@@ -39,12 +40,14 @@ export default function AcceptBid({ productId, setBidAccepted, open, handleOpen,
         try {
             await axiosEnableChat(user.email, { id2: product.email })
             await axiosAcceptProduct(productId, product);
+            
             navigate('/chats')
         } catch (err) {
             console.log(err)
         }
     }
 
+    
 
     return (
         <div>
