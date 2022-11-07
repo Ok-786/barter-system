@@ -2,7 +2,7 @@ import { IconButton, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = ({ setSearchQuery }) => (
-    <form>
+    <div>
         <TextField
             id="search-bar"
             className="text"
@@ -27,7 +27,7 @@ const SearchBar = ({ setSearchQuery }) => (
                 ),
             }}
         />
-    </form>
+    </div>
 );
 
 export default SearchBar
