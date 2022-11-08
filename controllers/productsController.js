@@ -235,9 +235,6 @@ export const postFeedback = async (req, res) => {
     const { id } = req.params;
 
     try {
-
-
-
         var product = await Users
             .doc(user_id)
             .get();
@@ -249,22 +246,25 @@ export const postFeedback = async (req, res) => {
 
 
         var user = await Products
-
             .where('id', '==', `${id}`)
             .get();
         const us = user.docs[0].data();
         var user3 = await Users.doc(us.user_id)
         var updatedUser = await user3.set({ stars: rat, rating: rat }, { merge: true });
-
+        var user3 = await Users.doc(us.user_id).get();
+        console.log('productsaaaaaaaaaa')
+        console.log(us)
         const products = Feedback.doc();
         await products.set({
             rating: r,
             feedback,
             product_id: id,
             id: products.id,
-            email: us.user_email
+            user_email: user3.data().email,
+            email: us.bids[0].email
         })
         console.log(products)
+
 
 
         var user3 = await Products.doc(id)

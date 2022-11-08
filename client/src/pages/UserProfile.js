@@ -255,6 +255,7 @@ export default function Detail() {
                     <Grid container rowGap={4} style={{ display: 'block' }} >
                         {
                             feedback.map(p =>
+                                userDetail.email == p.user_email &&
                                 <>
                                     <Grid item lg={3} mb={2} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
 
