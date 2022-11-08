@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Detail() {
     const location = useLocation();
+    const online = JSON.parse(localStorage.getItem('user'));
     const [edit, setEdit] = useState(false);
     const [report, setReport] = useState(false);
     const [userDetail, setUserDetail] = useState(location.state.user);
@@ -264,9 +265,11 @@ export default function Detail() {
                                             <div style={{ display: 'block' }} >
                                                 <h6 style={{ marginTop: '10px', }}>{p.email}</h6>
                                                 <h3 style={{ marginTop: '-4vh' }}>{p.feedback}</h3>
+                                                {console.log('asdasdadadad')}
+                                                {console.log(online, p)}
                                             </div>
                                             {
-                                                userDetail.email === p.email && hover && <div style={{ position: 'absolute', marginLeft: '90%' }} >
+                                                online.email === p.email && hover && <div style={{ position: 'absolute', marginLeft: '90%' }} >
                                                     <EditIcon color="secondary" style={{ cursor: 'pointer', zIndex: 99 }} onClick={() => { setOpen(true); setData({ rating: Math.floor(stars), feedback: p.feedback, email: userDetail.email }) }} />
                                                     <DeleteIcon color="error" style={{ cursor: 'pointer' }} onClick={() => onDeleteHandler(p.id)} />
                                                 </div>
