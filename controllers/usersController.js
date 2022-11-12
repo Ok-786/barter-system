@@ -345,9 +345,9 @@ export const getEnabledUsers = async (req, res) => {
 
 export const getChats = async (req, res) => {
 
-    
+
     try {
-        const snapshot = await Chat.get()
+        const snapshot = await Chat.orderBy('createdAt').get()
         console.log('a', snapshot.docs.map(doc => doc.data()))
         return res.json(snapshot.docs.map(doc => doc.data()))
     } catch (err) {

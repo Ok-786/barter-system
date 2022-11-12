@@ -43,7 +43,7 @@ export default function AddProduct(props) {
                 formData.append('user_email', user.email);
                 formData.append('user_name', user.name);
                 formData.append('type', values.type);
-                formData.append('category', values.type == 'Selection' ? values.category : undefined);
+                formData.append('category', values.category);
                 formData.append('worth', values.worth);
                 formData.append('title', values.title);
                 formData.append('additionalDetails', values.additionalDetails);

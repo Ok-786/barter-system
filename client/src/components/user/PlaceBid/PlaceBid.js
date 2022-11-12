@@ -101,7 +101,13 @@ export default function PlaceBid({ getProducts, open, handleOpen, handleClose, p
                     } catch (err) {
                         console.log("aaa" + err);
                     }
-
+                    if (response) {
+                        toast.success("Bid has been Placed!");
+                        navigate('/home')
+                        handleClose()
+                    } else {
+                        toast.error(response);
+                    }
                 }
                 else {
                     toast.error(`The respective item must be a ${product.category}`)
