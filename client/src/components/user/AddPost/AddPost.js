@@ -37,6 +37,8 @@ export default function AddProduct(props) {
         initialValues: {},
         onSubmit: async (values) => {
             try {
+                console.log('asasaadadadasdasdasd')
+                console.log(values.category)
                 const formData = new FormData();
                 formData.append('user_id', user.id);
                 formData.append('stars', user.rating);
@@ -67,13 +69,13 @@ export default function AddProduct(props) {
                 const parseRes = await response.json();
                 if (parseRes.products) {
                     toast.success("New Product added!");
-                    formik.resetForm();
+                    // formik.resetForm();
                 } else {
                     toast.error(parseRes);
                 }
                 console.log(response);
 
-                navigate('/home')
+                // navigate('/home')
             } catch (error) {
                 console.log(error);
             }
@@ -184,7 +186,7 @@ export default function AddProduct(props) {
                                     </option>
                                 </select>
                             </Grid>
-                            {isSelection && <Grid item xs={12} style={{ display: 'grid' }}>
+                            {<Grid item xs={12} style={{ display: 'grid' }}>
                                 <label className="labels" >Select Category</label>
                                 <select
                                     name="category"
