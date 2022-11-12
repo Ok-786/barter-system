@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 import { readFile } from 'fs/promises';
 
-const firebaseConfig = JSON.parse(await readFile(new URL('./firebase_credentials.json', import.meta.url)));
+const firebaseConfig = JSON.parse(await readFile(new URL('./firebase_credentials2.json', import.meta.url)));
 
 
 

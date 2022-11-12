@@ -36,6 +36,7 @@ export const loginUser = async (req, res) => {
 export const signupAdmin = async (req, res) => {
     const { name, email, password } = req.body;
     var user = User.doc();
+    const user_id = user.id;
     try {
         user = await user.set({
             name,
@@ -60,8 +61,10 @@ export const signupAdmin = async (req, res) => {
         password,
         detail: '',
         rating: 0,
-        wish_list: []
+        wish_list: [],
+        id: user_id
     }
+    console.log('userid', user_id)
     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1hr" });
     return res.status(200).json({ token, user: payload });
 }
