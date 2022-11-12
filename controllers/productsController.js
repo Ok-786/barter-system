@@ -44,7 +44,7 @@ export const registerProducts = async (req, res) => {
             type: data.type,
             title: data.title,
             worth: data.worth,
-            user_id: data.user_id,
+            user_id: data.id,
             reported: false,
             noReported: 0,
             user_email: data.user_email,

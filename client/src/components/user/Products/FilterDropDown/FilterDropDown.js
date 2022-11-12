@@ -42,7 +42,7 @@ export default function FilterDropDown({ setDistance }) {
             >
                 <MenuItem onClick={() => { setDistance(10); handleClose() }}>10 KM</MenuItem>
                 <MenuItem onClick={() => { setDistance(30); handleClose() }}>30 KM</MenuItem>
-                <MenuItem onClick={() => { setDistance(50000); handleClose() }}>60 KM</MenuItem>
+                <MenuItem onClick={() => { setDistance(500000000000000000000); handleClose() }}>60 KM</MenuItem>
             </Menu>
         </div>
     );
