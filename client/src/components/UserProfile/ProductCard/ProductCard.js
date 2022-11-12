@@ -112,7 +112,7 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                         style={{ objectFit: 'contain', backgroundColor: 'rgb(0,0,0,.3)', width: '100%', borderRadius: '20px' }}
                         image={product.bidAccepted ? sold : `http://localhost:8000/${product.image}`}
                         alt="green iguana"
-
+                        onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}
                     />
                     {console.log(`http://localhost:8000/${product.image}`)}
                     {hover ?
@@ -132,8 +132,9 @@ const ProductCard = React.memo(({ product, getProducts, isUser }) => {
                                         justifyContent: 'center',
                                         textAlign: 'center',
                                     }}
+                                    onClick={() => navigate(`/productdetail/${product.id}`, { state: { product } })}
                                 >
-                                    {!isUser && <Button variant='outlined' onClick={handleOpen} color="secondary" style={{ marginBlock: '50%', borderRadius: '10px' }}><b>Place a Bid</b></Button>}
+                                    {/* {!isUser && <Button variant='outlined' onClick={handleOpen} color="secondary" style={{ marginBlock: '50%', borderRadius: '10px' }}><b>Place a Bid</b></Button>} */}
                                 </Box>
                                 :
                                 <Box

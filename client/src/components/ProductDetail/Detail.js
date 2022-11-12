@@ -179,6 +179,7 @@ export default function Detail() {
                                                     <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.email}</b></div>
                                                     <div style={{ float: 'right', flex: 1, marginTop: '1vh' }}><b>{bid.worth}$</b></div>
                                                     {product.user_id === onlineUser.id && <IconButton onClick={() => { setSelectedBid(bid); handleOpenBid() }}><ArrowCircleUpIcon color="secondary" fontSize="large" /></IconButton>}
+                                                    {product.user_email === onlineUser.email && <IconButton onClick={() => { setSelectedBid(bid); handleOpenBid() }}><ArrowCircleUpIcon color="secondary" fontSize="large" /></IconButton>}
                                                 </div>
                                             </div>))
                                         :
